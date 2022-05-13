@@ -1,0 +1,187 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+final pageView = <String, Widget>{
+  'p1': const P1(),
+  'p2': const P2(),
+  'p3': const P3(),
+};
+
+var treeBtn = Map<String, Widget>.from(pageView);
+
+var titleAction = <String, Widget>{};
+//
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MyHomePage(title: 'aa'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: MyWidget(pageView));
+  }
+}
+
+String pageViewIndex = '';
+
+class MyWidget extends StatefulWidget {
+  MyWidget(this.pageView, {Key? key}) : super(key: key);
+
+  Map<String, Widget> pageView;
+
+  @override
+  State<MyWidget> createState() => _MyWidgetState();
+}
+
+class _MyWidgetState extends State<MyWidget> {
+  @override
+  Widget build(BuildContext context) {
+    var ix = widget.pageView.keys.toList().indexOf(pageViewIndex);
+    // Widget? wd = ix == -1 ? Container() : widget.pageView[pageViewIndex];
+    return Container(
+      child: Column(children: [
+        Text("title"),
+        Container(
+            height: 100,
+            decoration: BoxDecoration(
+              color: Colors.yellow,
+              border: Border.all(color: Colors.black, width: 3),
+            ),
+            child: Row(
+              children: [
+                for (var i = 0; i < titleAction.values.toList().length; i++)
+                  titleAction.values.toList()[i],
+              ],
+            )),
+        Row(
+          children: [
+            Container(
+              width: 100,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (var i = 0; i < treeBtn.length; i++)
+                    TButton(treeBtn.keys.toList()[i],
+                        treeBtn.values.toList()[i], 'test')
+                ],
+              ),
+            ),
+            Expanded(
+                child:
+                    ix == -1 ? Container() : widget.pageView[pageViewIndex]!),
+          ],
+        )
+      ]),
+    );
+  }
+
+  TextButton TButton(String key, Widget pw1, String btnName) {
+    return TextButton(
+        onPressed: () {
+          widget.pageView.putIfAbsent(key, () => pw1);
+          titleAction.putIfAbsent(
+              key,
+              () => Container(
+                    margin: const EdgeInsets.only(left: 16.0),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(
+                            color: const Color.fromARGB(255, 138, 97, 97),
+                            width: 1)),
+                    child: Row(
+                      children: [
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              // actionList.removeWhere((key, value) => key == '2');
+                              // controller.pageIndex = controller.pageIndex - 1;
+                            },
+                            child: const Text(
+                              '模拟',
+                              style: TextStyle(color: Colors.black87),
+                            )),
+                        IconButton(
+                            onPressed: () {
+                              widget.pageView.remove(key);
+                              titleAction.remove(key);
+                              pageViewIndex = widget.pageView.isEmpty
+                                  ? pageViewIndex
+                                  : widget.pageView.keys.last;
+                              setState(() {});
+                            },
+                            icon: const Icon(Icons.close)),
+                        const SizedBox(
+                          width: 5,
+                        )
+                      ],
+                    ),
+                  ));
+          pageViewIndex = key;
+          setState(() {});
+        },
+        child: Text('追加' + key));
+  }
+}
+
+class P1 extends StatelessWidget {
+  const P1({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Text('p1'),
+    );
+  }
+}
+
+class P2 extends StatelessWidget {
+  const P2({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Text('P2'),
+    );
+  }
+}
+
+class P3 extends StatelessWidget {
+  const P3({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Text('p3'),
+    );
+  }
+}
