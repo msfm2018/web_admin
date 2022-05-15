@@ -1,31 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-import 'cfg.dart';
-import 'tree_view_xe.dart';
+import 'bean/ObjectBean.dart';
+import 'bean/cfg.dart';
+import 'bean/tree_view.dart';
+import 'p_1.dart';
+import 'p_2.dart';
+import 'p_3.dart';
 
+var two = [
+  Node([], [
+    LeafNode("按钮1", const P1()),
+  ], "二级机构"),
+];
+var root = [
+  Node([
+    ...two
+  ], [
+    LeafNode("按钮2", const P2()),
+    LeafNode("按钮3", const P3()),
+  ], "一级机构"),
+];
 void main() {
   runApp(const MyApp());
-}
 
-final leafPageView = <String, Widget>{
-  '按钮1': const P1(),
-  '按钮2': const P2(),
-  '按钮3': const P3(),
-};
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Cfg().setLeafNode = Map<String, Widget>.from(leafPageView);
-    Cfg().title = '世界上最简单的树';
+    Cfg().title = '世界上最容易使用的树';
+    // Cfg().rightPanelColor = Colors.red;
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'aa'),
+      home: const MyHomePage(title: 'demo'),
     );
   }
 }
@@ -43,42 +57,13 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: const TreeViewXe());
-  }
-}
-
-class P1 extends StatelessWidget {
-  const P1({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Text('p1'),
-    );
-  }
-}
-
-class P2 extends StatelessWidget {
-  const P2({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Text('P2'),
-    );
-  }
-}
-
-class P3 extends StatelessWidget {
-  const P3({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Text('p3'),
-    );
+        appBar: PreferredSize(
+            child: AppBar(
+              elevation: 1.5,
+              backgroundColor: Colors.black,
+              title: Text(widget.title),
+            ),
+            preferredSize: const Size.fromHeight(30.0)),
+        body: TreeView(root));
   }
 }
