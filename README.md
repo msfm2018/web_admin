@@ -1,4 +1,10 @@
 # v0.2
+应用跑起来 
+
+flutter clean
+
+flutter create .
+
 
 A new Flutter project.
 
