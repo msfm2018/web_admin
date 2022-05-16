@@ -51,4 +51,8 @@ class Cfg {
     memoryPageViewAction.putIfAbsent(
         (node.object as LeafNode).name, () => titleWideget(node));
   }
+
+  updateUi() {
+    Cfg().streamController.add(Cfg());
+  }
 }
