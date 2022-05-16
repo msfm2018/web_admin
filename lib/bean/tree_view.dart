@@ -47,10 +47,10 @@ class _TreeViewState extends State<TreeView> {
                     if (node.expand)
                       {node.expand = false, TreeNodes().collapse(node.nodeId)}
                     else
-                      {node.expand = true, TreeNodes().expand(node.nodeId)}
+                      {node.expand = true, TreeNodes().expand(node.nodeId)},
                   };
 
-            setState(() {});
+            Cfg().updateUi();
           },
         ));
       }
@@ -70,9 +70,8 @@ class _TreeViewState extends State<TreeView> {
           moveLeft(5.0),
           TextButton(
               onPressed: () {
-                setState(() {
-                  Cfg().setPageView((node.object as LeafNode).name);
-                });
+                Cfg().setPageView((node.object as LeafNode).name);
+                Cfg().updateUi();
               },
               child: Text(
                 (node.object as LeafNode).name,
@@ -81,8 +80,7 @@ class _TreeViewState extends State<TreeView> {
           IconButton(
               onPressed: () {
                 Cfg().delPageView((node.object as LeafNode).name);
-
-                setState(() {});
+                Cfg().updateUi();
               },
               icon: const Icon(Icons.close)),
           moveLeft(5.0)
@@ -93,11 +91,27 @@ class _TreeViewState extends State<TreeView> {
 
   @override
   Widget build(BuildContext context) {
+    print('build.........');
     return Container(
       color: Colors.white,
       child: Column(
         children: [
-          Cfg().title == '' ? Container() : Text(Cfg().title),
+          // Cfg().title == '' ? Container() : Text(Cfg().title),
+          StreamBuilder<Cfg>(
+            stream: Cfg().streamController.stream,
+            initialData: Cfg(),
+            builder: (context, snapshot) {
+              return Cfg().title == ''
+                  ? Container()
+                  : Text(snapshot.data!.title);
+            },
+          ),
+          TextButton(
+              onPressed: () {
+                Cfg().title = 'eeee';
+                Cfg().updateUi();
+              },
+              child: Text("修改测试")),
           Expanded(
             child: Row(children: [
               //左树 右pageView
@@ -106,46 +120,56 @@ class _TreeViewState extends State<TreeView> {
                   children: [
                     Container(
                       color: Cfg().leftPanelColor,
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: _buildNode(TreeNodes().expandItem)),
+                      child: StreamBuilder(
+                          stream: Cfg().streamController.stream,
+                          builder: (context, snapshot) {
+                            return Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: _buildNode(TreeNodes().expandItem));
+                          }),
                     ),
                     Expanded(
                         child: Container(
-                            color: Cfg().rightPanelColor,
-                            height: double.infinity,
-                            child: Column(
-                              children: [
-                                Container(
-                                    height: Cfg().titleHeight,
-                                    decoration: BoxDecoration(
-                                      color: Cfg().titlePanelColor,
-                                      border: Border.all(
-                                          color: Colors.black45, width: 1),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        //标题快捷按钮
-                                        for (var i = 0;
-                                            i <
-                                                Cfg()
-                                                    .memoryPageViewAction
-                                                    .values
-                                                    .toList()
-                                                    .length;
-                                            i++)
-                                          Cfg()
-                                              .memoryPageViewAction
-                                              .values
-                                              .toList()[i],
-                                      ],
-                                    )),
-                                Expanded(
-                                    child: Cfg().memoryPageView[
-                                            Cfg().pageViewIndex] ??
-                                        Container()),
-                              ],
-                            ))),
+                      color: Cfg().rightPanelColor,
+                      height: double.infinity,
+                      child: StreamBuilder(
+                        stream: Cfg().streamController.stream,
+                        builder: (context, snapshot) {
+                          return Column(
+                            children: [
+                              Container(
+                                  height: Cfg().titleHeight,
+                                  decoration: BoxDecoration(
+                                    color: Cfg().titlePanelColor,
+                                    border: Border.all(
+                                        color: Colors.black45, width: 1),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      //标题快捷按钮
+                                      for (var i = 0;
+                                          i <
+                                              Cfg()
+                                                  .memoryPageViewAction
+                                                  .values
+                                                  .toList()
+                                                  .length;
+                                          i++)
+                                        Cfg()
+                                            .memoryPageViewAction
+                                            .values
+                                            .toList()[i],
+                                    ],
+                                  )),
+                              Expanded(
+                                  child: Cfg().memoryPageView[
+                                          Cfg().pageViewIndex] ??
+                                      Container()),
+                            ],
+                          );
+                        },
+                      ),
+                    )),
                   ],
                 ),
               )

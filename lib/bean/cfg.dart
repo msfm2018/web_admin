@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'ObjectBean.dart';
@@ -7,11 +9,15 @@ class Cfg {
     _h = this;
     memoryPageView = <String, Widget>{};
     memoryPageViewAction = <String, Widget>{};
+
+    streamController = StreamController<Cfg>.broadcast();
   }
   static Cfg? _h;
   factory Cfg() {
     return _h ??= Cfg._();
   }
+
+  late StreamController<Cfg> streamController;
 
   ///页面临时pageView
   late var memoryPageView;
@@ -37,12 +43,12 @@ class Cfg {
     pageViewIndex = name;
   }
 
-  savePageView(dynamic Function(dynamic), node) {
+  savePageView(Widget titleWideget(node), node) {
     //pageView
     memoryPageView.putIfAbsent(
         (node.object as LeafNode).name, () => (node.object as LeafNode).object);
     //title button
     memoryPageViewAction.putIfAbsent(
-        (node.object as LeafNode).name, () => Function(dynamic));
+        (node.object as LeafNode).name, () => titleWideget(node));
   }
 }
