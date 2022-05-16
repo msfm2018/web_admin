@@ -37,12 +37,12 @@ class Cfg {
     pageViewIndex = name;
   }
 
-  savePageView(dynamic Function(dynamic), node) {
+  savePageView(Widget titleWideget(node), node) {
     //pageView
     memoryPageView.putIfAbsent(
         (node.object as LeafNode).name, () => (node.object as LeafNode).object);
     //title button
     memoryPageViewAction.putIfAbsent(
-        (node.object as LeafNode).name, () => Function(dynamic));
+        (node.object as LeafNode).name, () => titleWideget(node));
   }
 }
