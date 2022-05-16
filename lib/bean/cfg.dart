@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'ObjectBean.dart';
+
 class Cfg {
   Cfg._() {
     _h = this;
@@ -33,5 +35,14 @@ class Cfg {
 
   setPageView(name) {
     pageViewIndex = name;
+  }
+
+  savePageView(dynamic Function(dynamic), node) {
+    //pageView
+    memoryPageView.putIfAbsent(
+        (node.object as LeafNode).name, () => (node.object as LeafNode).object);
+    //title button
+    memoryPageViewAction.putIfAbsent(
+        (node.object as LeafNode).name, () => Function(dynamic));
   }
 }

@@ -39,48 +39,9 @@ class _TreeViewState extends State<TreeView> {
           onTap: () {
             node.isLeaf
                 ? {
-                    Cfg().memoryPageView.putIfAbsent(
-                        (node.object as LeafNode).name,
-                        () => (node.object as LeafNode).object),
-                    Cfg().memoryPageViewAction.putIfAbsent(
-                        (node.object as LeafNode).name,
-                        () => Container(
-                              margin: const EdgeInsets.only(left: 16.0),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
-                                  border: Border.all(
-                                      color: const Color.fromARGB(
-                                          255, 138, 97, 97),
-                                      width: 1)),
-                              child: Row(
-                                children: [
-                                  moveLeft(5.0),
-                                  TextButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          Cfg().setPageView(
-                                              (node.object as LeafNode).name);
-                                        });
-                                      },
-                                      child: Text(
-                                        (node.object as LeafNode).name,
-                                        style: const TextStyle(
-                                            color: Colors.black87),
-                                      )),
-                                  IconButton(
-                                      onPressed: () {
-                                        Cfg().delPageView(
-                                            (node.object as LeafNode).name);
-
-                                        setState(() {});
-                                      },
-                                      icon: const Icon(Icons.close)),
-                                  moveLeft(5.0)
-                                ],
-                              ),
-                            )),
+                    Cfg().savePageView((node) => titleWideget(node), node),
                     // 页面跳转
-                    Cfg().pageViewIndex = (node.object as LeafNode).name
+                    Cfg().setPageView((node.object as LeafNode).name),
                   }
                 : {
                     if (node.expand)
@@ -95,6 +56,39 @@ class _TreeViewState extends State<TreeView> {
       }
     }
     return widgets;
+  }
+
+  Widget titleWideget(node) {
+    return Container(
+      margin: const EdgeInsets.only(left: 16.0),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(
+              color: const Color.fromARGB(255, 138, 97, 97), width: 1)),
+      child: Row(
+        children: [
+          moveLeft(5.0),
+          TextButton(
+              onPressed: () {
+                setState(() {
+                  Cfg().setPageView((node.object as LeafNode).name);
+                });
+              },
+              child: Text(
+                (node.object as LeafNode).name,
+                style: const TextStyle(color: Colors.black87),
+              )),
+          IconButton(
+              onPressed: () {
+                Cfg().delPageView((node.object as LeafNode).name);
+
+                setState(() {});
+              },
+              icon: const Icon(Icons.close)),
+          moveLeft(5.0)
+        ],
+      ),
+    );
   }
 
   @override
