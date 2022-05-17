@@ -1,4 +1,5 @@
 import 'ObjectBean.dart';
+import 'cfg.dart';
 
 enum NodeState { nsExpanded, nsSelected, nsFocused }
 
@@ -14,12 +15,12 @@ class TreeNode<T> {
   int selectedIndex;
 
   TreeNode(
-    this.expand,
     this.depth,
     this.isLeaf,
     this.nodeId,
     this.fatherId,
     this.object, {
+    this.expand = false,
     this.selectedIndex = -1,
   });
 }
@@ -61,6 +62,10 @@ class TreeNodes {
     }
     index = index == -1 ? 0 : index;
     expandItem.insertAll(index, tmp);
+  }
+
+  void expandAll() {
+    expandItem.insertAll(0, items);
   }
 
   void collapse(int id) {
@@ -105,10 +110,14 @@ class TreeNodes {
 
   void dataParse(Node node, {int depth = 0, int fatherId = -1}) {
     int currentId = nodeId;
-    items.add(TreeNode(false, depth, false, nodeId++, fatherId, node));
+    if (Cfg().allExpand) {
+      items.add(TreeNode(depth, false, nodeId++, fatherId, node, expand: true));
+    } else {
+      items.add(TreeNode(depth, false, nodeId++, fatherId, node));
+    }
 
     for (LeafNode leaf in node.leafs) {
-      items.add(TreeNode(false, depth + 1, true, nodeId++, currentId, leaf));
+      items.add(TreeNode(depth + 1, true, nodeId++, currentId, leaf));
     }
 
     for (Node nd in node.data) {

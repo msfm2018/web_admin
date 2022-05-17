@@ -18,8 +18,14 @@ class _TreeViewState extends State<TreeView> {
   @override
   void initState() {
     TreeNodes().dataParses(widget.organs);
-    TreeNodes().init();
-    TreeNodes().expand(1);
+    if (Cfg().allExpand) {
+      // 全部展开
+      TreeNodes().expandAll();
+    } else {
+      TreeNodes().init();
+    }
+    // TreeNodes().expand(1);
+    // TreeNodes().expandAll();
     super.initState();
   }
 
@@ -134,7 +140,6 @@ class _TreeViewState extends State<TreeView> {
       color: Colors.white,
       child: Column(
         children: [
-          // Cfg().title == '' ? Container() : Text(Cfg().title),
           StreamBuilder<Cfg>(
             stream: Cfg().streamController.stream,
             initialData: Cfg(),
@@ -146,10 +151,10 @@ class _TreeViewState extends State<TreeView> {
           ),
           TextButton(
               onPressed: () {
-                Cfg().title = 'eeee';
+                Cfg().title = '没毛病老铁';
                 Cfg().updateUi();
               },
-              child: Text("没毛病老铁")),
+              child: Text("修改")),
           Expanded(
             child: Row(children: [
               //左树 右pageView

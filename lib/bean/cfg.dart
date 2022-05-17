@@ -19,6 +19,8 @@ class Cfg {
     return _h ??= Cfg._();
   }
 
+  bool allExpand = false;
+
   late StreamController<Cfg> streamController;
 
   ///页面临时pageView
