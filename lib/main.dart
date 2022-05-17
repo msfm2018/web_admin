@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'demo'),
+      home: const MyHomePage(title: '世界上最简单易使用的框架'),
     );
   }
 }
@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: PreferredSize(
             child: AppBar(
               elevation: 1.5,
-              backgroundColor: Colors.black,
+              // backgroundColor: Colors.black,
               title: Text(widget.title),
             ),
             preferredSize: const Size.fromHeight(30.0)),
