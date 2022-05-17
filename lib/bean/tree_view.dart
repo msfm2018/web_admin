@@ -5,6 +5,8 @@ import 'leaf_item.dart';
 import 'tree_node.dart';
 import 'cfg.dart';
 
+typedef fcb = void Function(String name);
+
 class TreeView extends StatefulWidget {
   const TreeView(this.organs, {Key? key}) : super(key: key);
   final List<Node> organs;
@@ -39,7 +41,10 @@ class _TreeViewState extends State<TreeView> {
           onTap: () {
             node.isLeaf
                 ? {
-                    Cfg().savePageView((node) => titleWideget(node), node),
+                    Cfg().savePageView(
+                        (node) => btnWidget((node.object as LeafNode).name,
+                            openViewPage, delViewPage),
+                        node),
                     // 页面跳转
                     Cfg().setPageView((node.object as LeafNode).name),
                   }
@@ -58,34 +63,49 @@ class _TreeViewState extends State<TreeView> {
     return widgets;
   }
 
-  Widget titleWideget(node) {
+  void openViewPage(name) {
+    Cfg().setPageView(name);
+    Cfg().updateUi();
+  }
+
+  void delViewPage(name) {
+    Cfg().delPageView(name);
+    Cfg().updateUi();
+  }
+
+  Widget btnWidget(name, fcb openViewPage, fcb delViewPage) {
+    double iconSize = Cfg().titleBtn / 2;
     return Container(
-      margin: const EdgeInsets.only(left: 16.0),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4),
-          border: Border.all(
-              color: const Color.fromARGB(255, 138, 97, 97), width: 1)),
+      height: Cfg().titleBtn,
+      margin: const EdgeInsets.only(left: 10.0),
+      decoration: const BoxDecoration(
+        color: Colors.tealAccent,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        // border: Border.all(color: const Color.fromARGB(255, 138, 97, 97), width: 1)
+      ),
+
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          moveLeft(5.0),
           TextButton(
               onPressed: () {
-                Cfg().setPageView((node.object as LeafNode).name);
-                Cfg().updateUi();
+                openViewPage(name);
               },
               child: Text(
-                (node.object as LeafNode).name,
+                name,
                 style: const TextStyle(color: Colors.black87),
               )),
           IconButton(
               onPressed: () {
-                Cfg().delPageView((node.object as LeafNode).name);
-                Cfg().updateUi();
+                delViewPage(name);
               },
-              icon: const Icon(Icons.close)),
-          moveLeft(5.0)
+              icon: Icon(
+                Icons.close,
+                size: iconSize,
+              )),
         ],
       ),
+      // color: Colors.greenAccent,
     );
   }
 
@@ -111,7 +131,7 @@ class _TreeViewState extends State<TreeView> {
                 Cfg().title = 'eeee';
                 Cfg().updateUi();
               },
-              child: Text("修改测试")),
+              child: Text("没毛病老铁")),
           Expanded(
             child: Row(children: [
               //左树 右pageView
@@ -119,7 +139,10 @@ class _TreeViewState extends State<TreeView> {
                 child: Row(
                   children: [
                     Container(
-                      color: Cfg().leftPanelColor,
+                      decoration: BoxDecoration(
+                          color: Cfg().leftPanelColor,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10))),
                       child: StreamBuilder(
                           stream: Cfg().streamController.stream,
                           builder: (context, snapshot) {
@@ -128,6 +151,8 @@ class _TreeViewState extends State<TreeView> {
                                 children: _buildNode(TreeNodes().expandItem));
                           }),
                     ),
+
+                    //-------------------------------
                     Expanded(
                         child: Container(
                       color: Cfg().rightPanelColor,
@@ -141,8 +166,8 @@ class _TreeViewState extends State<TreeView> {
                                   height: Cfg().titleHeight,
                                   decoration: BoxDecoration(
                                     color: Cfg().titlePanelColor,
-                                    border: Border.all(
-                                        color: Colors.black45, width: 1),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(6)),
                                   ),
                                   child: Row(
                                     children: [
@@ -177,12 +202,6 @@ class _TreeViewState extends State<TreeView> {
           ),
         ],
       ),
-    );
-  }
-
-  SizedBox moveLeft(w) {
-    return SizedBox(
-      width: w,
     );
   }
 }

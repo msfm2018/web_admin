@@ -17,7 +17,7 @@ class LeafItem extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(8),
             child: Row(
               children: <Widget>[
                 Padding(

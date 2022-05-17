@@ -3,7 +3,7 @@ import 'ObjectBean.dart';
 enum NodeState { nsExpanded, nsSelected, nsFocused }
 
 class TreeNode<T> {
-  bool expand;
+  bool expand = true;
   int depth;
   bool isLeaf;
   int nodeId;

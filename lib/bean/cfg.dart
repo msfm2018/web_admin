@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:ffi';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 
@@ -27,10 +29,11 @@ class Cfg {
   String title = '';
   String pageViewIndex = '';
 
-  var rightPanelColor = Color.fromARGB(127, 255, 255, 255);
-  var leftPanelColor = Color.fromARGB(255, 241, 188, 188);
-  var titlePanelColor = Color.fromARGB(127, 255, 255, 255);
+  var rightPanelColor = Colors.deepOrange[50];
+  var leftPanelColor = Colors.deepOrange[100];
+  var titlePanelColor = Colors.deepOrange;
   var titleHeight = 40.0;
+  double titleBtn = 30.0;
 
   delPageView(name) {
     memoryPageView.remove(name);
