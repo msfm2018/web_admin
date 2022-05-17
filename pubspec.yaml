@@ -1,8 +1,8 @@
 name: myplus
 description: A new Flutter package project.
 version: 0.0.1
-author:jack jone<g445219998@gmail.com>
-homepage:https://github.com/msfm2018/treexe
+author: jackjone <g445219998@gmail.com>
+homepage: https://github.com/msfm2018/treexe
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
