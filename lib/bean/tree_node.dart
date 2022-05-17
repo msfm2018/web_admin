@@ -3,7 +3,7 @@ import 'ObjectBean.dart';
 enum NodeState { nsExpanded, nsSelected, nsFocused }
 
 class TreeNode<T> {
-  bool expand = true;
+  bool expand;
   int depth;
   bool isLeaf;
   int nodeId;
@@ -59,6 +59,7 @@ class TreeNodes {
         break;
       }
     }
+    index = index == -1 ? 0 : index;
     expandItem.insertAll(index, tmp);
   }
 

@@ -5,7 +5,7 @@ import 'leaf_item.dart';
 import 'tree_node.dart';
 import 'cfg.dart';
 
-typedef fcb = void Function(String name);
+typedef Fcb = void Function(String name);
 
 class TreeView extends StatefulWidget {
   const TreeView(this.organs, {Key? key}) : super(key: key);
@@ -19,6 +19,7 @@ class _TreeViewState extends State<TreeView> {
   void initState() {
     TreeNodes().dataParses(widget.organs);
     TreeNodes().init();
+    TreeNodes().expand(1);
     super.initState();
   }
 
@@ -73,7 +74,7 @@ class _TreeViewState extends State<TreeView> {
     Cfg().updateUi();
   }
 
-  Widget btnWidget(name, fcb openViewPage, fcb delViewPage) {
+  Widget btnWidget(name, Fcb openViewPage, Fcb delViewPage) {
     double iconSize = Cfg().titleBtn / 2;
     return Container(
       height: Cfg().titleBtn,
@@ -87,14 +88,31 @@ class _TreeViewState extends State<TreeView> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
+          const SizedBox(
+            width: 2,
+          ),
           TextButton(
-              onPressed: () {
-                openViewPage(name);
-              },
+              style: ButtonStyle(
+                  //圆角
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.67))),
+                  //边框
+                  side: MaterialStateProperty.all(
+                    const BorderSide(color: Colors.red, width: 0.67),
+                  ),
+                  //背景
+                  backgroundColor:
+                      MaterialStateProperty.all(Colors.transparent)),
               child: Text(
                 name,
-                style: const TextStyle(color: Colors.black87),
-              )),
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                    fontSize: 14),
+              ),
+              onPressed: () {
+                openViewPage(name);
+              }),
           IconButton(
               onPressed: () {
                 delViewPage(name);
