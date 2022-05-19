@@ -5,3 +5,4 @@ export 'src/cfg.dart';
 export 'src/leaf_item.dart';
 export 'src/tree_node.dart';
 export 'src/tree_view.dart';
+export 'src/data_base.dart';

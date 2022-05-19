@@ -7,8 +7,9 @@ class Node {
   Node(this.data, this.leafs, this.name);
 }
 
-class LeafNode {
-  String name;
+class LeafNode<T> {
+  String btnCaption;
   Widget object;
-  LeafNode(this.name, this.object);
+  T? clas;
+  LeafNode(this.object, {required this.btnCaption, this.clas});
 }

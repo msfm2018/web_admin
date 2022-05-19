@@ -41,7 +41,7 @@ class _TreeViewState extends State<TreeView> {
                     ? const Icon(Icons.arrow_circle_up_sharp, size: 20)
                     : const Icon(Icons.arrow_circle_down_sharp, size: 20),
             node.isLeaf
-                ? (node.object as LeafNode).name
+                ? (node.object as LeafNode).btnCaption
                 : (node.object as Node).name,
             // left: node.depth * 20.0,
           ),
@@ -49,11 +49,14 @@ class _TreeViewState extends State<TreeView> {
             node.isLeaf
                 ? {
                     Cfg().savePageView(
-                        (node) => btnWidget((node.object as LeafNode).name,
-                            openViewPage, delViewPage),
+                        (node) => btnWidget(
+                            node,
+                            (node.object as LeafNode).btnCaption,
+                            openViewPage,
+                            delViewPage),
                         node),
                     // 页面跳转
-                    Cfg().setPageView((node.object as LeafNode).name),
+                    Cfg().setPageView((node.object as LeafNode).btnCaption),
                   }
                 : {
                     if (node.expand)
@@ -77,10 +80,12 @@ class _TreeViewState extends State<TreeView> {
 
   void delViewPage(name) {
     Cfg().delPageView(name);
+    // Cfg().memoryPageViewDataObject.remove(name);
+
     Cfg().updateUi();
   }
 
-  Widget btnWidget(name, Fcb openViewPage, Fcb delViewPage) {
+  Widget btnWidget(node, name, Fcb openViewPage, Fcb delViewPage) {
     double iconSize = Cfg().titleBtn / 2;
     return Container(
       height: Cfg().titleBtn,

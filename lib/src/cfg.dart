@@ -9,20 +9,24 @@ class Cfg {
     _h = this;
     memoryPageView = <String, Widget>{};
     memoryPageViewAction = <String, Widget>{};
-
+    memoryPageViewDataObject = <String, dynamic>{};
     streamController = StreamController<Cfg>.broadcast();
   }
+
   static Cfg? _h;
   factory Cfg() {
     return _h ??= Cfg._();
   }
 
-  bool allExpand = true;
+  bool allExpand = false;
 
   late StreamController<Cfg> streamController;
 
   ///页面临时pageView
-  late var memoryPageView;
+  late Map<String, Widget> memoryPageView;
+
+  ///数据Persistence持久化
+  late Map<String, dynamic> memoryPageViewDataObject;
 
   ///内存节点快捷按钮
   late var memoryPageViewAction;
@@ -38,8 +42,21 @@ class Cfg {
   delPageView(name) {
     memoryPageView.remove(name);
     memoryPageViewAction.remove(name);
+    memoryPageViewDataObject.update(name, (value) {
+      // if ((value != null) && (value.restore != null)) {
+      if ((value != null)) {
+        if (value.restore() != null) {
+          value.restore();
+        }
+      }
+    });
+    memoryPageViewDataObject.remove(name);
     pageViewIndex =
         memoryPageView.isEmpty ? pageViewIndex : memoryPageView.keys.last;
+    // memoryPageView.remove(name);
+    // memoryPageViewAction.remove(name);
+    // pageViewIndex =
+    //     memoryPageView.isEmpty ? pageViewIndex : memoryPageView.keys.last;
   }
 
   setPageView(name) {
@@ -47,12 +64,32 @@ class Cfg {
   }
 
   savePageView(Widget titleWideget(node), node) {
-    //pageView
-    memoryPageView.putIfAbsent(
-        (node.object as LeafNode).name, () => (node.object as LeafNode).object);
-    //title button
-    memoryPageViewAction.putIfAbsent(
-        (node.object as LeafNode).name, () => titleWideget(node));
+    // if (memoryPageView.containsKey((node.object as LeafNode).btnCaption)) {
+    // } else {
+    //   //pageView
+    //   memoryPageView.putIfAbsent((node.object as LeafNode).btnCaption,
+    //       () => (node.object as LeafNode).object);
+    //   //title button
+    //   memoryPageViewAction.putIfAbsent(
+    //       (node.object as LeafNode).btnCaption, () => titleWideget(node));
+    // }
+    if (memoryPageView.containsKey((node.object as LeafNode).btnCaption)) {
+    } else {
+      //pageView
+      memoryPageView.putIfAbsent((node.object as LeafNode).btnCaption,
+          () => (node.object as LeafNode).object);
+      //title button
+      memoryPageViewAction.putIfAbsent(
+          (node.object as LeafNode).btnCaption, () => titleWideget(node));
+    }
+
+    ///持久化 memoryPageViewDataObject
+    if (memoryPageViewDataObject
+        .containsKey((node.object as LeafNode).btnCaption)) {
+    } else {
+      memoryPageViewDataObject.putIfAbsent(
+          (node.object as LeafNode).btnCaption, () => node.object.clas);
+    }
   }
 
   updateUi() {

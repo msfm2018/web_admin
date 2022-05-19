@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class P1 extends StatelessWidget {
-  const P1({Key? key}) : super(key: key);
-
+  P1(this.name, {Key? key}) : super(key: key);
+  var name = '';
   @override
   Widget build(BuildContext context) {
     return ListView.separated(

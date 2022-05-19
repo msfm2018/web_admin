@@ -1,5 +1,5 @@
-import 'object_bean.dart';
 import 'cfg.dart';
+import 'object_bean.dart';
 
 enum NodeState { nsExpanded, nsSelected, nsFocused }
 
@@ -117,6 +117,10 @@ class TreeNodes {
     }
 
     for (LeafNode leaf in node.leafs) {
+      ///数据持久化
+      // Cfg()
+      //     .memoryPageViewDataObject
+      //     .putIfAbsent(leaf.btnCaption, () => leaf.clas);
       items.add(TreeNode(depth + 1, true, nodeId++, currentId, leaf));
     }
 
