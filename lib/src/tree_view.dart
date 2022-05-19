@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'object_bean.dart';
@@ -15,8 +17,11 @@ class TreeView extends StatefulWidget {
 }
 
 class _TreeViewState extends State<TreeView> {
+  var selectName = '';
+  late StreamController<String> selectControl;
   @override
   void initState() {
+    selectControl = StreamController<String>.broadcast();
     TreeNodes().dataParses(widget.organs);
     if (Cfg().allExpand) {
       // 全部展开
@@ -43,6 +48,10 @@ class _TreeViewState extends State<TreeView> {
             node.isLeaf
                 ? (node.object as LeafNode).btnCaption
                 : (node.object as Node).name,
+            textColor: (node.object is LeafNode) &&
+                    (node.object as LeafNode).btnCaption == selectName
+                ? Colors.yellow
+                : Colors.red,
             // left: node.depth * 20.0,
           ),
           onTap: () {
@@ -55,6 +64,8 @@ class _TreeViewState extends State<TreeView> {
                             openViewPage,
                             delViewPage),
                         node),
+                    selectName = (node.object as LeafNode).btnCaption,
+                    selectControl.add(selectName),
                     // 页面跳转
                     Cfg().setPageView((node.object as LeafNode).btnCaption),
                   }
@@ -81,60 +92,75 @@ class _TreeViewState extends State<TreeView> {
   void delViewPage(name) {
     Cfg().delPageView(name);
     // Cfg().memoryPageViewDataObject.remove(name);
-
+    selectName = Cfg().pageViewIndex;
+    selectControl.add(selectName);
     Cfg().updateUi();
+  }
+
+  @override
+  void dispose() {
+    selectControl.close();
+    super.dispose();
   }
 
   Widget btnWidget(node, name, Fcb openViewPage, Fcb delViewPage) {
     double iconSize = Cfg().titleBtn / 2;
-    return Container(
-      height: Cfg().titleBtn,
-      margin: const EdgeInsets.only(left: 10.0),
-      decoration: const BoxDecoration(
-        color: Colors.tealAccent,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        // border: Border.all(color: const Color.fromARGB(255, 138, 97, 97), width: 1)
-      ),
-
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(
-            width: 2,
+    return StreamBuilder(
+      stream: selectControl.stream,
+      // initialData: 'initvalue',
+      builder: (a, b) {
+        return Container(
+          height: Cfg().titleBtn,
+          margin: const EdgeInsets.only(left: 10.0),
+          decoration: BoxDecoration(
+            color: name == selectName ? Colors.tealAccent : Colors.red,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            // border: Border.all(color: const Color.fromARGB(255, 138, 97, 97), width: 1)
           ),
-          TextButton(
-              style: ButtonStyle(
-                  //圆角
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.67))),
-                  //边框
-                  side: MaterialStateProperty.all(
-                    const BorderSide(color: Colors.red, width: 0.67),
-                  ),
-                  //背景
-                  backgroundColor:
-                      MaterialStateProperty.all(Colors.transparent)),
-              child: Text(
-                name,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                    fontSize: 14),
+
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(
+                width: 2,
               ),
-              onPressed: () {
-                openViewPage(name);
-              }),
-          IconButton(
-              onPressed: () {
-                delViewPage(name);
-              },
-              icon: Icon(
-                Icons.close,
-                size: iconSize,
-              )),
-        ],
-      ),
-      // color: Colors.greenAccent,
+              TextButton(
+                  style: ButtonStyle(
+                      //圆角
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.67))),
+                      //边框
+                      side: MaterialStateProperty.all(
+                        const BorderSide(color: Colors.red, width: 0.67),
+                      ),
+                      //背景
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.transparent)),
+                  child: Text(
+                    name,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                        fontSize: 14),
+                  ),
+                  onPressed: () {
+                    openViewPage(name);
+                    selectName = name;
+                    selectControl.add(name);
+                  }),
+              IconButton(
+                  onPressed: () {
+                    delViewPage(name);
+                  },
+                  icon: Icon(
+                    Icons.close,
+                    size: iconSize,
+                  )),
+            ],
+          ),
+          // color: Colors.greenAccent,
+        );
+      },
     );
   }
 
