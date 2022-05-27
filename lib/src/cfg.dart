@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 
 import 'object_bean.dart';
+
+typedef Wb<T> = Widget Function(T);
 
 class Cfg {
   Cfg._() {
@@ -33,9 +36,9 @@ class Cfg {
   String title = '';
   String pageViewIndex = '';
 
-  var rightPanelColor = Colors.deepOrange[50];
-  var leftPanelColor = Colors.deepOrange[100];
-  var titlePanelColor = Colors.deepOrange;
+  var rightPanelColor = Colors.white;
+  var leftPanelColor = Colors.white;
+  var titlePanelColor = Colors.deepOrange[100];
   var titleHeight = 40.0;
   double titleBtn = 30.0;
 
@@ -43,56 +46,49 @@ class Cfg {
     memoryPageView.remove(name);
     memoryPageViewAction.remove(name);
     memoryPageViewDataObject.update(name, (value) {
-      // if ((value != null) && (value.restore != null)) {
       if ((value != null)) {
-        if (value.restore() != null) {
-          value.restore();
+        if (value.destroy() != null) {
+          value.destroy();
         }
       }
     });
     memoryPageViewDataObject.remove(name);
     pageViewIndex =
         memoryPageView.isEmpty ? pageViewIndex : memoryPageView.keys.last;
-    // memoryPageView.remove(name);
-    // memoryPageViewAction.remove(name);
-    // pageViewIndex =
-    //     memoryPageView.isEmpty ? pageViewIndex : memoryPageView.keys.last;
   }
 
   setPageView(name) {
     pageViewIndex = name;
   }
 
-  savePageView(Widget titleWideget(node), node) {
-    // if (memoryPageView.containsKey((node.object as LeafNode).btnCaption)) {
-    // } else {
-    //   //pageView
-    //   memoryPageView.putIfAbsent((node.object as LeafNode).btnCaption,
-    //       () => (node.object as LeafNode).object);
-    //   //title button
-    //   memoryPageViewAction.putIfAbsent(
-    //       (node.object as LeafNode).btnCaption, () => titleWideget(node));
-    // }
-    if (memoryPageView.containsKey((node.object as LeafNode).btnCaption)) {
+  savePageView(Wb b, node) {
+    if (memoryPageView.containsKey((node.object as LeafNode).leafName)) {
     } else {
       //pageView
-      memoryPageView.putIfAbsent((node.object as LeafNode).btnCaption,
+      memoryPageView.putIfAbsent((node.object as LeafNode).leafName,
           () => (node.object as LeafNode).object);
       //title button
       memoryPageViewAction.putIfAbsent(
-          (node.object as LeafNode).btnCaption, () => titleWideget(node));
+          (node.object as LeafNode).leafName, () => b(node));
     }
 
     ///持久化 memoryPageViewDataObject
     if (memoryPageViewDataObject
-        .containsKey((node.object as LeafNode).btnCaption)) {
+        .containsKey((node.object as LeafNode).leafName)) {
     } else {
       memoryPageViewDataObject.putIfAbsent(
-          (node.object as LeafNode).btnCaption, () => node.object.clas);
+          (node.object as LeafNode).leafName, () => node.object.clas);
     }
   }
 
-  updateUi() {
+  notifyUi() {
     Cfg().streamController.add(Cfg());
+  }
+
+  String getRandom(int length) {
+    const ch = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    Random r = Random();
+    return String.fromCharCodes(
+        Iterable.generate(length, (_) => ch.codeUnitAt(r.nextInt(ch.length))));
   }
 }

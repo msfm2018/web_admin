@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'cfg.dart';
 import 'object_bean.dart';
 
@@ -10,7 +12,16 @@ class TreeNode<T> {
   int nodeId;
   int fatherId;
 
-  ///父节点 还是leaf节点
+  ///叶图标
+  Icon? icon;
+
+  ///目录折叠图标
+  Icon? dirUnSelectIcon;
+
+  ///目录展开图标
+  Icon? dirSelectIcon;
+
+  ///目录节点 还是Widget leaf节点
   T object;
   int selectedIndex;
 
@@ -20,6 +31,9 @@ class TreeNode<T> {
     this.nodeId,
     this.fatherId,
     this.object, {
+    this.icon,
+    this.dirUnSelectIcon,
+    this.dirSelectIcon,
     this.expand = false,
     this.selectedIndex = -1,
   });
@@ -27,16 +41,14 @@ class TreeNode<T> {
 
 class TreeNodes {
   ///所有数据
-  late List<TreeNode> items;
+  late List<TreeNode> treeNodes;
 
   ///展开数据
-  late List<TreeNode> expandItem;
-  late List<int> dirtyItem;
+  late List<TreeNode> expandNodes;
   int nodeId = 1;
   TreeNodes._() {
-    items = [];
-    expandItem = [];
-    dirtyItem = [];
+    treeNodes = [];
+    expandNodes = [];
     _h = this;
   }
   static TreeNodes? _h;
@@ -46,86 +58,88 @@ class TreeNodes {
 
   void expand(int id) {
     List<TreeNode> tmp = [];
-    for (TreeNode node in items) {
+    for (TreeNode node in treeNodes) {
       if (node.fatherId == id) {
         tmp.add(node);
       }
     }
     //找到插入点
     int index = -1;
-    int length = expandItem.length;
+    int length = expandNodes.length;
     for (int i = 0; i < length; i++) {
-      if (id == expandItem[i].nodeId) {
+      if (id == expandNodes[i].nodeId) {
         index = i + 1;
         break;
       }
     }
     index = index == -1 ? 0 : index;
-    expandItem.insertAll(index, tmp);
+    expandNodes.insertAll(index, tmp);
   }
 
   void expandAll() {
-    expandItem.insertAll(0, items);
+    expandNodes.insertAll(0, treeNodes);
   }
 
   void collapse(int id) {
+    var _dirtyNodes = <int>[];
     void _markDirty(int id) {
-      for (TreeNode node in expandItem) {
+      for (TreeNode node in expandNodes) {
         if (id == node.fatherId) {
           if (!node.isLeaf) {
             _markDirty(node.nodeId);
           }
-          dirtyItem.add(node.nodeId);
+          _dirtyNodes.add(node.nodeId);
         }
       }
     }
 
-    dirtyItem.clear();
+    _dirtyNodes.clear();
     _markDirty(id);
     List<TreeNode> tmp = [];
-    for (TreeNode node in expandItem) {
-      if (!dirtyItem.contains(node.nodeId)) {
+    for (TreeNode node in expandNodes) {
+      if (!_dirtyNodes.contains(node.nodeId)) {
         tmp.add(node);
       } else {
         node.expand = false;
       }
     }
-    expandItem.clear();
-    expandItem.addAll(tmp);
+    expandNodes.clear();
+    expandNodes.addAll(tmp);
   }
 
   void init() {
-    for (TreeNode node in items) {
+    for (TreeNode node in treeNodes) {
       if (node.fatherId == -1) {
-        expandItem.add(node);
+        expandNodes.add(node);
       }
     }
   }
 
-  void dataParses(List<Node> nodes) {
-    for (Node node in nodes) {
-      dataParse(node);
+  void dataParses(List<DirectoryNode> nodes) {
+    for (DirectoryNode dir in nodes) {
+      dataParse(dir);
     }
   }
 
-  void dataParse(Node node, {int depth = 0, int fatherId = -1}) {
+  void dataParse(DirectoryNode dir, {int depth = 0, int fatherId = -1}) {
     int currentId = nodeId;
     if (Cfg().allExpand) {
-      items.add(TreeNode(depth, false, nodeId++, fatherId, node, expand: true));
+      treeNodes.add(TreeNode(depth, false, nodeId++, fatherId, dir,
+          expand: true,
+          dirSelectIcon: dir.dirSelectedIcon,
+          dirUnSelectIcon: dir.dirUnSelectedIcon));
     } else {
-      items.add(TreeNode(depth, false, nodeId++, fatherId, node));
+      treeNodes.add(TreeNode(depth, false, nodeId++, fatherId, dir,
+          dirSelectIcon: dir.dirSelectedIcon,
+          dirUnSelectIcon: dir.dirUnSelectedIcon));
     }
 
-    for (LeafNode leaf in node.leafs) {
-      ///数据持久化
-      // Cfg()
-      //     .memoryPageViewDataObject
-      //     .putIfAbsent(leaf.btnCaption, () => leaf.clas);
-      items.add(TreeNode(depth + 1, true, nodeId++, currentId, leaf));
+    for (LeafNode leaf in dir.leafs) {
+      treeNodes.add(TreeNode(depth + 1, true, nodeId++, currentId, leaf));
     }
 
-    for (Node nd in node.data) {
-      dataParse(nd, depth: depth + 1, fatherId: currentId);
+    for (DirectoryNode dr in dir.childDirectoryNodes) {
+      dataParse(dr, depth: depth + 1, fatherId: currentId);
     }
   }
 }

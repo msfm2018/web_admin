@@ -11,8 +11,7 @@ class P4 extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<P4>
-    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+class _MyHomePageState extends State<P4> with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   int counter = 0;
   late final TextEditingController _controller;
   @override
@@ -21,8 +20,7 @@ class _MyHomePageState extends State<P4>
 
     WidgetsBinding.instance.addObserver(this);
     debugPrint('initState');
-    _controller = TextEditingController(
-        text: (Cfg().memoryPageViewDataObject[widget.name]).editText);
+    _controller = TextEditingController(text: (Cfg().memoryPageViewDataObject[widget.name]).editText);
   }
 
   @override
@@ -52,9 +50,7 @@ class _MyHomePageState extends State<P4>
     print('p-4');
     return Scaffold(
       appBar: AppBar(
-        title: Text(Cfg().memoryPageViewDataObject[widget.name] == null
-            ? ''
-            : (Cfg().memoryPageViewDataObject[widget.name]).a),
+        title: Text(Cfg().memoryPageViewDataObject[widget.name] == null ? '' : (Cfg().memoryPageViewDataObject[widget.name]).a),
         // title: Text('${Cfg().testint}'),
       ),
       body: Center(

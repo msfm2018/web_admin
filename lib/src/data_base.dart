@@ -1,3 +1,3 @@
 abstract class DataBase {
-  void restore();
+  void destroy();
 }

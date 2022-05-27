@@ -13,11 +13,9 @@ class P3 extends StatefulWidget {
 
 class _P3State extends State<P3> {
   StreamController<String> ss = StreamController();
-  // int i = 0;
   @override
   void dispose() {
     ss.close();
-    // (Cfg().memoryPageViewDataObject[widget.name]).myTitle = '';
     super.dispose();
   }
 

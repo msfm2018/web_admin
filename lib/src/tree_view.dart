@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import 'object_bean.dart';
@@ -11,13 +10,16 @@ typedef Fcb = void Function(String name);
 
 class TreeView extends StatefulWidget {
   const TreeView(this.organs, {Key? key}) : super(key: key);
-  final List<Node> organs;
+  final List<DirectoryNode> organs;
   @override
   State<TreeView> createState() => _TreeViewState();
 }
 
 class _TreeViewState extends State<TreeView> {
+  Color X1 = Colors.black;
   var selectName = '';
+  var selectColor = Colors.blue;
+  var unSelectColor = Colors.grey; // Colors.black;
   late StreamController<String> selectControl;
   @override
   void initState() {
@@ -38,47 +40,64 @@ class _TreeViewState extends State<TreeView> {
     var widgets = <Widget>[];
     if (nodes.isNotEmpty) {
       for (TreeNode node in nodes) {
-        widgets.add(GestureDetector(
-          child: LeafItem(
-            node.isLeaf
-                ? const Icon(Icons.arrow_right, size: 20)
-                : node.expand
-                    ? const Icon(Icons.arrow_circle_up_sharp, size: 20)
-                    : const Icon(Icons.arrow_circle_down_sharp, size: 20),
-            node.isLeaf
-                ? (node.object as LeafNode).btnCaption
-                : (node.object as Node).name,
-            textColor: (node.object is LeafNode) &&
-                    (node.object as LeafNode).btnCaption == selectName
-                ? Colors.yellow
-                : Colors.red,
-            // left: node.depth * 20.0,
-          ),
-          onTap: () {
-            node.isLeaf
-                ? {
-                    Cfg().savePageView(
-                        (node) => btnWidget(
-                            node,
-                            (node.object as LeafNode).btnCaption,
-                            openViewPage,
-                            delViewPage),
-                        node),
-                    selectName = (node.object as LeafNode).btnCaption,
-                    selectControl.add(selectName),
-                    // 页面跳转
-                    Cfg().setPageView((node.object as LeafNode).btnCaption),
-                  }
-                : {
-                    if (node.expand)
-                      {node.expand = false, TreeNodes().collapse(node.nodeId)}
-                    else
-                      {node.expand = true, TreeNodes().expand(node.nodeId)},
-                  };
+        widgets.add(
+          //
+          GestureDetector(
+            child:
+                //
+                LeafItem(
+              node.isLeaf
 
-            Cfg().updateUi();
-          },
-        ));
+                  ///选中 图标与字体一起变色
+                  ? (node.object is LeafNode) && (node.object as LeafNode).leafName == selectName
+                      ? (node.object as LeafNode).leafSelectedIcon ??
+                          const Icon(
+                            Icons.description_outlined,
+                            size: 20,
+                            // color: selectColor,
+                          )
+                      : (node.object as LeafNode).leafUnSelectedIcon ??
+                          const Icon(
+                            Icons.description_outlined,
+                            size: 20,
+                            // color: unSelectColor,
+                          )
+
+                  ///目录开合图标
+                  : node.expand
+                      ? node.dirSelectIcon ?? const Icon(Icons.swap_vert_circle_outlined, size: 20)
+                      : node.dirUnSelectIcon ?? const Icon(Icons.arrow_circle_down_sharp, size: 20),
+
+              ///name     页节点 目录节点 名称 与颜色
+              node.isLeaf ? (node.object as LeafNode).leafName : (node.object as DirectoryNode).name,
+
+              ///  bgColor
+              (node.object is LeafNode) && (node.object as LeafNode).leafName == selectName ? selectColor : unSelectColor,
+
+              ///
+              textColor: (node.object is LeafNode) && (node.object as LeafNode).leafName == selectName ? selectColor : unSelectColor,
+
+              ///树缩进
+              // left: (node.object is LeafNode) ? node.depth * 20.0 : 0,
+              left: (node.object is LeafNode) ? 20.0 : 0,
+            ),
+            onTap: () {
+              node.isLeaf
+                  ? {
+                      Cfg().savePageView((node) => pressButton(node, (node.object as LeafNode).leafName, openViewPage, delViewPage), node),
+                      selectName = (node.object as LeafNode).leafName,
+                      selectControl.add(selectName),
+                      // 页面跳转
+                      Cfg().setPageView((node.object as LeafNode).leafName),
+                    }
+                  : {
+                      if (node.expand) {node.expand = false, TreeNodes().collapse(node.nodeId)} else {node.expand = true, TreeNodes().expand(node.nodeId)},
+                    };
+
+              Cfg().notifyUi();
+            },
+          ),
+        );
       }
     }
     return widgets;
@@ -86,7 +105,7 @@ class _TreeViewState extends State<TreeView> {
 
   void openViewPage(name) {
     Cfg().setPageView(name);
-    Cfg().updateUi();
+    Cfg().notifyUi();
   }
 
   void delViewPage(name) {
@@ -94,7 +113,7 @@ class _TreeViewState extends State<TreeView> {
     // Cfg().memoryPageViewDataObject.remove(name);
     selectName = Cfg().pageViewIndex;
     selectControl.add(selectName);
-    Cfg().updateUi();
+    Cfg().notifyUi();
   }
 
   @override
@@ -103,8 +122,26 @@ class _TreeViewState extends State<TreeView> {
     super.dispose();
   }
 
-  Widget btnWidget(node, name, Fcb openViewPage, Fcb delViewPage) {
-    double iconSize = Cfg().titleBtn / 2;
+  Widget pressButton(node, name, Fcb openViewPage, Fcb delViewPage) {
+    double iconSize = Cfg().titleBtn / 4;
+
+    Color? overlayColor(Set<MaterialState> states) {
+      if (states.contains(MaterialState.focused)) {
+        return Colors.red;
+      }
+      if (states.contains(MaterialState.hovered)) {
+        return selectColor;
+      }
+      return null; // defer to the default overlayColor
+    }
+
+    Color? foregroundColor(Set<MaterialState> states) {
+      if (states.contains(MaterialState.focused) || states.contains(MaterialState.hovered)) {
+        return Colors.white;
+      }
+      return null; // defer to the default foregroundColor
+    }
+
     return StreamBuilder(
       stream: selectControl.stream,
       // initialData: 'initvalue',
@@ -113,35 +150,30 @@ class _TreeViewState extends State<TreeView> {
           height: Cfg().titleBtn,
           margin: const EdgeInsets.only(left: 10.0),
           decoration: BoxDecoration(
-            color: name == selectName ? Colors.tealAccent : Colors.red,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            // border: Border.all(color: const Color.fromARGB(255, 138, 97, 97), width: 1)
+            color: name == selectName ? selectColor : Colors.deepOrange[100],
+            borderRadius: const BorderRadius.all(Radius.circular(6)),
+            // border: Border.all(
+            // color: const Color.fromARGB(255, 138, 97, 97), width: 1)
           ),
 
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(
-                width: 2,
-              ),
               TextButton(
                   style: ButtonStyle(
+                      overlayColor: MaterialStateProperty.resolveWith<Color?>(overlayColor),
+                      foregroundColor: MaterialStateProperty.resolveWith<Color?>(foregroundColor),
                       //圆角
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.67))),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.67))),
                       //边框
                       side: MaterialStateProperty.all(
                         const BorderSide(color: Colors.red, width: 0.67),
                       ),
                       //背景
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.transparent)),
+                      backgroundColor: MaterialStateProperty.all(Colors.transparent)),
                   child: Text(
                     name,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                        fontSize: 14),
+                    style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87, fontSize: 14),
                   ),
                   onPressed: () {
                     openViewPage(name);
@@ -170,21 +202,29 @@ class _TreeViewState extends State<TreeView> {
       color: Colors.white,
       child: Column(
         children: [
+          ///上  header
+          const SizedBox(
+            height: 4,
+          ),
           StreamBuilder<Cfg>(
             stream: Cfg().streamController.stream,
             initialData: Cfg(),
             builder: (context, snapshot) {
-              return Cfg().title == ''
-                  ? Container()
-                  : Text(snapshot.data!.title);
+              return Cfg().title.isEmpty ? Container() : Text(snapshot.data!.title);
             },
           ),
-          TextButton(
-              onPressed: () {
-                Cfg().title = '没毛病老铁';
-                Cfg().updateUi();
-              },
-              child: Text("修改")),
+          // 测试
+          // Cfg().title.isEmpty
+          //     ? const SizedBox()
+          //     : TextButton(
+          //         onPressed: () {
+          //           Cfg().title = '没毛病老铁';
+          //           Cfg().updateUi();
+          //         },
+          //         child: const Text("修改")),
+
+          // 下
+
           Expanded(
             child: Row(children: [
               //左树 右pageView
@@ -192,17 +232,22 @@ class _TreeViewState extends State<TreeView> {
                 child: Row(
                   children: [
                     Container(
-                      decoration: BoxDecoration(
-                          color: Cfg().leftPanelColor,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10))),
+                      decoration: BoxDecoration(color: Cfg().leftPanelColor, borderRadius: const BorderRadius.all(Radius.circular(10))),
                       child: StreamBuilder(
                           stream: Cfg().streamController.stream,
                           builder: (context, snapshot) {
-                            return Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: _buildNode(TreeNodes().expandItem));
+                            return Column(mainAxisAlignment: MainAxisAlignment.start, children: _buildNode(TreeNodes().expandNodes));
                           }),
+                    ),
+                    // const VerticalDivider(),
+                    const SizedBox(
+                      width: 20,
+                      child: VerticalDivider(
+                        thickness: 1,
+                        indent: 0, //起点缩进距离
+                        endIndent: 0, //终点缩进距离
+                        color: Colors.redAccent, //是指分割线颜色
+                      ),
                     ),
 
                     //-------------------------------
@@ -219,30 +264,15 @@ class _TreeViewState extends State<TreeView> {
                                   height: Cfg().titleHeight,
                                   decoration: BoxDecoration(
                                     color: Cfg().titlePanelColor,
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(6)),
+                                    borderRadius: const BorderRadius.all(Radius.circular(6)),
                                   ),
                                   child: Row(
                                     children: [
                                       //标题快捷按钮
-                                      for (var i = 0;
-                                          i <
-                                              Cfg()
-                                                  .memoryPageViewAction
-                                                  .values
-                                                  .toList()
-                                                  .length;
-                                          i++)
-                                        Cfg()
-                                            .memoryPageViewAction
-                                            .values
-                                            .toList()[i],
+                                      for (var i = 0; i < Cfg().memoryPageViewAction.values.toList().length; i++) Cfg().memoryPageViewAction.values.toList()[i],
                                     ],
                                   )),
-                              Expanded(
-                                  child: Cfg().memoryPageView[
-                                          Cfg().pageViewIndex] ??
-                                      Container()),
+                              Expanded(child: Cfg().memoryPageView[Cfg().pageViewIndex] ?? Container()),
                             ],
                           );
                         },
