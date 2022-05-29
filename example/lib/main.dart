@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     Cfg().allExpand = true;
     return MaterialApp(
-      title: 'Flutter App',
+      title: title,
       theme: ThemeData(
         scaffoldBackgroundColor: AppConstans.bgColor,
         hintColor: Colors.grey.withOpacity(0.3),

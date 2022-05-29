@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'cfg.dart';
+import 'tree_node.dart';
+
 class LeafItem extends StatefulWidget {
   final double left;
   final Icon image;
@@ -7,8 +10,10 @@ class LeafItem extends StatefulWidget {
   Color? textColor;
   Color? bgColor;
   final double textSize;
+  itemOnTap itemOnTap1;
+  TreeNode node;
 
-  LeafItem(this.image, this.title, this.bgColor, {Key? key, this.left = 0, this.textColor = Colors.grey, this.textSize = 18}) : super(key: key);
+  LeafItem(this.image, this.title, this.bgColor, this.itemOnTap1, this.node, {Key? key, this.left = 0, this.textColor = Colors.grey, this.textSize = 18}) : super(key: key);
 
   @override
   State<LeafItem> createState() => _LeafItemState();
@@ -26,22 +31,35 @@ class _LeafItemState extends State<LeafItem> {
           child: Column(
             children: <Widget>[
               Container(
-                // color: widget.textColor,
+                // margin: EdgeInsets.only(left: 10),
                 decoration: BoxDecoration(color: widget.bgColor, borderRadius: const BorderRadius.only(bottomRight: Radius.circular(50), topRight: Radius.circular(50))),
-                padding: const EdgeInsets.all(8),
-                child: Row(
-                  children: <Widget>[
-                    Padding(padding: EdgeInsets.fromLTRB(widget.left, 0, 10, 0), child: widget.image),
-                    Expanded(
-                        child: Text(
-                      widget.title,
-                      style: TextStyle(
-                        color: Colors.white, // widget.textColor,
-                        fontSize: widget.textSize,
-                      ),
-                    )),
-                  ],
-                ),
+                // padding: const EdgeInsets.all(8),
+                child:
+
+                    /// Material 关键点 响应 hoverColor
+                    Material(
+                        child: ListTile(
+                  dense: true,
+                  shape: RoundedRectangleBorder(
+                    // borderRadius: BorderRadius.circular(50),
+                    borderRadius: const BorderRadius.only(bottomRight: Radius.circular(50), topRight: Radius.circular(50)),
+                    // side: BorderSide(color: Colors.black),
+                  ),
+                  title: Text(
+                    widget.title,
+                    style: TextStyle(fontSize: widget.textSize),
+                  ),
+                  leading: widget.image,
+                  // trailing: Icon(Icons.keyboard_arrow_right),
+                  // leading: CircleAvatar(backgroundImage: NetworkImage('https://lupic.cdn.bcebos.com/20210629/3000001317_14.jpg')),
+                  hoverColor: Colors.red,
+                  enabled: true,
+                  onTap: () {
+                    widget.itemOnTap1(widget.node);
+                  },
+                )),
+
+                ///
               ),
               // ),
               Container(

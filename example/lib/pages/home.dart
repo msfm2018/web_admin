@@ -19,7 +19,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: AppBar(
               automaticallyImplyLeading: false,
               elevation: 1.5,
-              title: const Text('MyApp.title'),
+              title: const Text('flutter企业级应用框架'),
             )),
         body: TreeView(rootNode));
   }

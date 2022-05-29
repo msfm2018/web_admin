@@ -4,8 +4,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'object_bean.dart';
+import 'tree_node.dart';
 
 typedef Wb<T> = Widget Function(T);
+
+typedef itemOnTap = void Function(TreeNode<dynamic> node);
 
 class Cfg {
   Cfg._() {
@@ -53,8 +56,7 @@ class Cfg {
       }
     });
     memoryPageViewDataObject.remove(name);
-    pageViewIndex =
-        memoryPageView.isEmpty ? pageViewIndex : memoryPageView.keys.last;
+    pageViewIndex = memoryPageView.isEmpty ? pageViewIndex : memoryPageView.keys.last;
   }
 
   setPageView(name) {
@@ -65,19 +67,15 @@ class Cfg {
     if (memoryPageView.containsKey((node.object as LeafNode).leafName)) {
     } else {
       //pageView
-      memoryPageView.putIfAbsent((node.object as LeafNode).leafName,
-          () => (node.object as LeafNode).object);
+      memoryPageView.putIfAbsent((node.object as LeafNode).leafName, () => (node.object as LeafNode).object);
       //title button
-      memoryPageViewAction.putIfAbsent(
-          (node.object as LeafNode).leafName, () => b(node));
+      memoryPageViewAction.putIfAbsent((node.object as LeafNode).leafName, () => b(node));
     }
 
     ///持久化 memoryPageViewDataObject
-    if (memoryPageViewDataObject
-        .containsKey((node.object as LeafNode).leafName)) {
+    if (memoryPageViewDataObject.containsKey((node.object as LeafNode).leafName)) {
     } else {
-      memoryPageViewDataObject.putIfAbsent(
-          (node.object as LeafNode).leafName, () => node.object.clas);
+      memoryPageViewDataObject.putIfAbsent((node.object as LeafNode).leafName, () => node.object.clas);
     }
   }
 
@@ -88,7 +86,6 @@ class Cfg {
   String getRandom(int length) {
     const ch = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
     Random r = Random();
-    return String.fromCharCodes(
-        Iterable.generate(length, (_) => ch.codeUnitAt(r.nextInt(ch.length))));
+    return String.fromCharCodes(Iterable.generate(length, (_) => ch.codeUnitAt(r.nextInt(ch.length))));
   }
 }
