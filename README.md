@@ -2,9 +2,9 @@
 
 应用跑起来
 
-flutter clean
+运行 example 中lib目录下的 main
 
-flutter create .
+编译环境 flutter3 vscode
 
 
 
