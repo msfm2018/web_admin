@@ -3,6 +3,7 @@ import 'package:myplus/myplus.dart';
 
 import '../constans/constans.dart';
 import '../pages/p_map.dart';
+import '../pages/p_multipage.dart';
 import '../pages/p_password.dart';
 import '../pages/p_barcode.dart';
 import '../pages/p_chart.dart';
@@ -61,6 +62,16 @@ var twoNode = [
         LeafNode(P1('人脸检测'),
             leafName: "人脸检测",
             clas: P1Data(),
+            leafSelectedIcon: const Icon(
+              Icons.abc,
+              color: AppConstans.selectColor,
+            ),
+            leafUnSelectedIcon: const Icon(
+              Icons.abc,
+              color: AppConstans.unSelectColor,
+            )),
+        LeafNode(PMultipage(),
+            leafName: "多页文档",
             leafSelectedIcon: const Icon(
               Icons.abc,
               color: AppConstans.selectColor,
