@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+class Mdata {
+  Mdata._() {
+    _h = this;
+  }
+  String str = '';
+  static Mdata? _h;
+  factory Mdata() {
+    return _h ??= Mdata._();
+  }
+}
+
+late StreamController sc;
 class PMultipage extends StatelessWidget {
   const PMultipage({Key? key}) : super(key: key);
 
@@ -73,6 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    sc = StreamController<Mdata>.broadcast();
     _scrollController.addListener(() {
       if (_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
         if (!_isScrollingDown) {
@@ -91,23 +104,27 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: //Stack(children: [
+      body: Column(
+        children: [
+          TextButton(
+              onPressed: () {
+                Mdata().str = 'abc';
+                sc.add(Mdata());
+              },
+              child: Text('wenben')),
+          //Stack(children: [
           SectionsBody(
-        scrollController: _scrollController,
-        sectionsLength: _sectionsIcons.length,
-        sectionWidget: sectionWidget,
+            scrollController: _scrollController,
+            sectionsLength: _sectionsIcons.length,
+            sectionWidget: sectionWidget,
+          )
+        ],
       ),
       //])
     );
@@ -128,8 +145,19 @@ class _F1State extends State<F1> {
       color: Colors.yellow,
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      child: Text(
-        '鼠标滚动下一页',
+      child: Column(
+        children: [
+          StreamBuilder(
+            stream: sc.stream,
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.hasData) {
+                return Text((snapshot.data as Mdata).str);
+              } else {
+                return Text('data');
+              }
+            },
+          ),
+        ],
       ),
     );
   }
@@ -146,10 +174,25 @@ class _F2State extends State<F2> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: Text('最后一页'),
-    );
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          children: [
+            StreamBuilder(
+              stream: sc.stream,
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if (snapshot.hasData) {
+                  return Text((snapshot.data as Mdata).str);
+                } else {
+                  return Text('data111111111111');
+                }
+                // // if (snapshot.hasData) {
+                // return Text('${(snapshot.data as Mdata).str}--------');
+                // // } else return const Text('data');
+              },
+            ),
+          ],
+        ));
   }
 }
 
