@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myplus/myplus.dart';
 
 import '../constans/constans.dart';
+import '../pages/friend_circle.dart';
 import '../pages/p_map.dart';
 import '../pages/p_multipage.dart';
 import '../pages/p_password.dart';
@@ -91,7 +92,7 @@ var twoNode = [
               Icons.abc,
               color: AppConstans.unSelectColor,
             )),
-        LeafNode(PBarcode(),
+        LeafNode(const PBarcode(),
             leafName: "生成二维码",
             clas: P1Data(),
             leafSelectedIcon: const Icon(
@@ -102,7 +103,18 @@ var twoNode = [
               Icons.abc,
               color: AppConstans.unSelectColor,
             )),
-        LeafNode(PMaps(),
+        LeafNode(const FriendCircle(data: friendCircleData),
+            leafName: "朋友圈",
+            clas: P1Data(),
+            leafSelectedIcon: const Icon(
+              Icons.abc,
+              color: AppConstans.selectColor,
+            ),
+            leafUnSelectedIcon: const Icon(
+              Icons.abc,
+              color: AppConstans.unSelectColor,
+            )),
+        LeafNode(const PMaps(),
             leafName: "地图",
             clas: P1Data(),
             leafSelectedIcon: const Icon(

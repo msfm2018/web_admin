@@ -10,7 +10,7 @@ typedef Wb<T> = Widget Function(T);
 
 typedef itemOnTap = void Function(TreeNode<dynamic> node);
 
-class Cfg {
+class Cfg extends State {
   Cfg._() {
     _h = this;
     memoryPageView = <String, Widget>{};
@@ -87,5 +87,16 @@ class Cfg {
     const ch = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
     Random r = Random();
     return String.fromCharCodes(Iterable.generate(length, (_) => ch.codeUnitAt(r.nextInt(ch.length))));
+  }
+
+  @override
+  Widget build(Object context) {
+    return Container();
+  }
+
+  @override
+  void dispose() {
+    streamController.close();
+    super.dispose();
   }
 }
