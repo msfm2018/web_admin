@@ -3,6 +3,7 @@ import 'package:myplus/myplus.dart';
 
 import '../constans/constans.dart';
 import '../pages/friend_circle.dart';
+import '../pages/im/mainpage.dart';
 import '../pages/p_map.dart';
 import '../pages/p_multipage.dart';
 import '../pages/p_password.dart';
@@ -172,6 +173,14 @@ var rootNode = [
         ///叶节点
         LeafNode(PChart(),
             leafName: "图表",
+            leafSelectedIcon: const Icon(
+              Icons.trending_up,
+            ),
+            leafUnSelectedIcon: const Icon(
+              Icons.trending_up,
+            )),
+        LeafNode(CodeBookHomePage(),
+            leafName: "IM",
             leafSelectedIcon: const Icon(
               Icons.trending_up,
             ),

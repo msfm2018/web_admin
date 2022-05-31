@@ -151,7 +151,7 @@ class _TreeViewState extends State<TreeView> {
       builder: (a, b) {
         return Container(
           height: Cfg().titleBtn,
-          margin: const EdgeInsets.only(left: 10.0),
+          margin: const EdgeInsets.only(left: 6.0, right: 6.0),
           decoration: BoxDecoration(
             color: name == selectName ? selectColor : Colors.deepOrange[100],
             borderRadius: const BorderRadius.all(Radius.circular(6)),
@@ -189,6 +189,10 @@ class _TreeViewState extends State<TreeView> {
                     Icons.close,
                     size: iconSize,
                   )),
+              const VerticalDivider(
+                color: Colors.grey,
+                width: 1,
+              )
             ],
           ),
           // color: Colors.greenAccent,
