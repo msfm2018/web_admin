@@ -10,23 +10,24 @@ typedef Wb<T> = Widget Function(T);
 
 typedef itemOnTap = void Function(TreeNode<dynamic> node);
 
-class Cfg extends State {
-  Cfg._() {
+///树的管理者
+class Trees extends State {
+  Trees._() {
     _h = this;
     memoryPageView = <String, Widget>{};
     memoryPageViewAction = <String, Widget>{};
     memoryPageViewDataObject = <String, dynamic>{};
-    streamController = StreamController<Cfg>.broadcast();
+    streamController = StreamController<Trees>.broadcast();
   }
 
-  static Cfg? _h;
-  factory Cfg() {
-    return _h ??= Cfg._();
+  static Trees? _h;
+  factory Trees() {
+    return _h ??= Trees._();
   }
 
   bool allExpand = false;
 
-  late StreamController<Cfg> streamController;
+  late StreamController<Trees> streamController;
 
   ///页面临时pageView
   late Map<String, Widget> memoryPageView;
@@ -80,7 +81,7 @@ class Cfg extends State {
   }
 
   notifyUi() {
-    Cfg().streamController.add(Cfg());
+    Trees().streamController.add(Trees());
   }
 
   String getRandom(int length) {

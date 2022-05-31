@@ -20,7 +20,7 @@ class _MyHomePageState extends State<P4> with AutomaticKeepAliveClientMixin, Wid
 
     WidgetsBinding.instance.addObserver(this);
     debugPrint('initState');
-    _controller = TextEditingController(text: (Cfg().memoryPageViewDataObject[widget.name]).editText);
+    _controller = TextEditingController(text: (Trees().memoryPageViewDataObject[widget.name]).editText);
   }
 
   @override
@@ -32,9 +32,9 @@ class _MyHomePageState extends State<P4> with AutomaticKeepAliveClientMixin, Wid
   void _incrementCounter() {
     setState(() {
       counter++;
-      (Cfg().memoryPageViewDataObject[widget.name]).testint = counter;
-      (Cfg().memoryPageViewDataObject[widget.name]).editText = _controller.text;
-      (Cfg().memoryPageViewDataObject[widget.name]).a = _controller.text;
+      (Trees().memoryPageViewDataObject[widget.name]).testint = counter;
+      (Trees().memoryPageViewDataObject[widget.name]).editText = _controller.text;
+      (Trees().memoryPageViewDataObject[widget.name]).a = _controller.text;
     });
   }
 
@@ -50,7 +50,7 @@ class _MyHomePageState extends State<P4> with AutomaticKeepAliveClientMixin, Wid
     print('p-4');
     return Scaffold(
       appBar: AppBar(
-        title: Text(Cfg().memoryPageViewDataObject[widget.name] == null ? '' : (Cfg().memoryPageViewDataObject[widget.name]).a),
+        title: Text(Trees().memoryPageViewDataObject[widget.name] == null ? '' : (Trees().memoryPageViewDataObject[widget.name]).a),
         // title: Text('${Cfg().testint}'),
       ),
       body: Center(
@@ -61,13 +61,13 @@ class _MyHomePageState extends State<P4> with AutomaticKeepAliveClientMixin, Wid
               'You have pushed the button this many times:',
             ),
             Text(
-              'OhMygod--${(Cfg().memoryPageViewDataObject[widget.name]).testint}',
+              'OhMygod--${(Trees().memoryPageViewDataObject[widget.name]).testint}',
               style: Theme.of(context).textTheme.headline4,
             ),
             TextFormField(
               controller: _controller,
               onChanged: (v) {
-                (Cfg().memoryPageViewDataObject[widget.name]).editText = v;
+                (Trees().memoryPageViewDataObject[widget.name]).editText = v;
               },
               // initialValue: Cfg().editText, // 'TextFormField - $counter',
             )

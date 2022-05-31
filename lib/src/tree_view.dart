@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'object_bean.dart';
 import 'leaf_item.dart';
 import 'tree_node.dart';
-import 'cfg.dart';
+import 'tree.dart';
 
 typedef Fcb = void Function(String name);
 late ScrollController _scrollController;
@@ -29,7 +29,7 @@ class _TreeViewState extends State<TreeView> {
     });
     selectControl = StreamController<String>.broadcast();
     TreeNodes().dataParses(widget.organs);
-    if (Cfg().allExpand) {
+    if (Trees().allExpand) {
       // 全部展开
       TreeNodes().expandAll();
     } else {
@@ -92,30 +92,29 @@ class _TreeViewState extends State<TreeView> {
   void itemOnTap(TreeNode<dynamic> node) {
     node.isLeaf
         ? {
-            Cfg().savePageView((node) => pressButton(node, (node.object as LeafNode).leafName, openViewPage, delViewPage), node),
+            Trees().savePageView((node) => pressButton(node, (node.object as LeafNode).leafName, openViewPage, delViewPage), node),
             selectName = (node.object as LeafNode).leafName,
             selectControl.add(selectName),
             // 页面跳转
-            Cfg().setPageView((node.object as LeafNode).leafName),
+            Trees().setPageView((node.object as LeafNode).leafName),
           }
         : {
             if (node.expand) {node.expand = false, TreeNodes().collapse(node.nodeId)} else {node.expand = true, TreeNodes().expand(node.nodeId)},
           };
 
-    Cfg().notifyUi();
+    Trees().notifyUi();
   }
 
   void openViewPage(name) {
-    Cfg().setPageView(name);
-    Cfg().notifyUi();
+    Trees().setPageView(name);
+    Trees().notifyUi();
   }
 
   void delViewPage(name) {
-    Cfg().delPageView(name);
-    // Cfg().memoryPageViewDataObject.remove(name);
-    selectName = Cfg().pageViewIndex;
+    Trees().delPageView(name);
+    selectName = Trees().pageViewIndex;
     selectControl.add(selectName);
-    Cfg().notifyUi();
+    Trees().notifyUi();
   }
 
   @override
@@ -126,11 +125,11 @@ class _TreeViewState extends State<TreeView> {
 
   ///导航按钮
   Widget pressButton(node, name, Fcb openViewPage, Fcb delViewPage) {
-    double iconSize = Cfg().titleBtn / 4;
+    double iconSize = Trees().titleBtn / 4;
 
     Color? overlayColor(Set<MaterialState> states) {
       if (states.contains(MaterialState.focused)) {
-        return Colors.red;
+        return Colors.grey.withOpacity(0.8);
       }
       if (states.contains(MaterialState.hovered)) {
         return selectColor;
@@ -150,7 +149,7 @@ class _TreeViewState extends State<TreeView> {
       // initialData: 'initvalue',
       builder: (a, b) {
         return Container(
-          height: Cfg().titleBtn,
+          height: Trees().titleBtn,
           margin: const EdgeInsets.only(left: 6.0, right: 6.0),
           decoration: BoxDecoration(
             color: name == selectName ? selectColor : Colors.deepOrange[100],
@@ -174,7 +173,7 @@ class _TreeViewState extends State<TreeView> {
                       backgroundColor: MaterialStateProperty.all(Colors.transparent)),
                   child: Text(
                     name,
-                    style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87, fontSize: 14),
+                    style: const TextStyle(fontFamily: 'WorkSans', letterSpacing: 0.2, fontWeight: FontWeight.w400, color: Color(0xFF4A6572), fontSize: 12),
                   ),
                   onPressed: () {
                     openViewPage(name);
@@ -211,11 +210,11 @@ class _TreeViewState extends State<TreeView> {
           const SizedBox(
             height: 4,
           ),
-          StreamBuilder<Cfg>(
-            stream: Cfg().streamController.stream,
-            initialData: Cfg(),
+          StreamBuilder<Trees>(
+            stream: Trees().streamController.stream,
+            initialData: Trees(),
             builder: (context, snapshot) {
-              return Cfg().title.isEmpty ? Container() : Text(snapshot.data!.title);
+              return Trees().title.isEmpty ? Container() : Text(snapshot.data!.title);
             },
           ),
           // 测试
@@ -243,7 +242,7 @@ class _TreeViewState extends State<TreeView> {
                       child: Column(
                         children: [
                           StreamBuilder(
-                              stream: Cfg().streamController.stream,
+                              stream: Trees().streamController.stream,
                               builder: (context, snapshot) {
                                 return Column(mainAxisAlignment: MainAxisAlignment.start, children: _buildNode(TreeNodes().expandNodes));
                               }),
@@ -264,17 +263,17 @@ class _TreeViewState extends State<TreeView> {
                     //-------------------------------
                     Expanded(
                         child: Container(
-                      color: Cfg().rightPanelColor,
+                      color: Trees().rightPanelColor,
                       height: double.infinity,
                       child: StreamBuilder(
-                        stream: Cfg().streamController.stream,
+                        stream: Trees().streamController.stream,
                         builder: (context, snapshot) {
                           return Column(
                             children: [
                               Container(
-                                  height: Cfg().titleHeight,
+                                  height: Trees().titleHeight,
                                   decoration: BoxDecoration(
-                                    color: Cfg().titlePanelColor,
+                                    color: Trees().titlePanelColor,
                                     borderRadius: const BorderRadius.all(Radius.circular(6)),
                                   ),
 
@@ -286,14 +285,14 @@ class _TreeViewState extends State<TreeView> {
                                     child: Row(
                                       children: [
                                         //标题快捷按钮
-                                        for (var i = 0; i < Cfg().memoryPageViewAction.values.toList().length; i++) Cfg().memoryPageViewAction.values.toList()[i],
+                                        for (var i = 0; i < Trees().memoryPageViewAction.values.toList().length; i++) Trees().memoryPageViewAction.values.toList()[i],
                                       ],
                                     ),
                                   ))
 
                                   ///
                                   ),
-                              Expanded(child: Cfg().memoryPageView[Cfg().pageViewIndex] ?? Container()),
+                              Expanded(child: Trees().memoryPageView[Trees().pageViewIndex] ?? Container()),
                             ],
                           );
                         },

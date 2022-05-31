@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'cfg.dart';
+import 'tree.dart';
 import 'tree_node.dart';
 
 class LeafItem extends StatefulWidget {
@@ -13,7 +13,7 @@ class LeafItem extends StatefulWidget {
   itemOnTap itemOnTap1;
   TreeNode node;
 
-  LeafItem(this.image, this.title, this.bgColor, this.itemOnTap1, this.node, {Key? key, this.left = 0, this.textColor = Colors.grey, this.textSize = 18}) : super(key: key);
+  LeafItem(this.image, this.title, this.bgColor, this.itemOnTap1, this.node, {Key? key, this.left = 0, this.textColor = Colors.grey, this.textSize = 16}) : super(key: key);
 
   @override
   State<LeafItem> createState() => _LeafItemState();
@@ -33,7 +33,7 @@ class _LeafItemState extends State<LeafItem> {
       child: Column(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(top: 10),
+            margin: const EdgeInsets.only(top: 10),
             decoration: BoxDecoration(color: widget.bgColor, borderRadius: const BorderRadius.only(bottomRight: Radius.circular(50), topRight: Radius.circular(50))),
             // padding: const EdgeInsets.all(8),
             child:
@@ -53,14 +53,23 @@ class _LeafItemState extends State<LeafItem> {
               title: Text(
                 widget.title,
                 style: TextStyle(
+                  // body1 -> body2
+                  fontFamily: 'WorkSans',
+                  fontWeight: FontWeight.w400,
                   fontSize: widget.textSize,
-                  fontWeight: FontWeight.w100,
+                  letterSpacing: 0.2,
+                  color: Color(0xFF253840),
                 ),
+
+                // TextStyle(
+                //   fontSize: widget.textSize,
+                //   fontWeight: FontWeight.w100,
+                // ),
               ),
               leading: widget.image,
               // trailing: Icon(Icons.keyboard_arrow_right),
               // leading: CircleAvatar(backgroundImage: NetworkImage('https://lupic.cdn.bcebos.com/20210629/3000001317_14.jpg')),
-              hoverColor: Colors.red,
+              hoverColor: Colors.blue.withOpacity(0.8),
               enabled: true,
               onTap: () {
                 widget.itemOnTap1(widget.node);

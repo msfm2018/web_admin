@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mtest/constans/constans.dart';
 import 'package:myplus/myplus.dart';
 
 import '../config/page_config.dart';
@@ -19,7 +20,10 @@ class _MyHomePageState extends State<MyHomePage> {
             child: AppBar(
               automaticallyImplyLeading: false,
               elevation: 1.5,
-              title: const Text('flutter企业级应用框架'),
+              title: const Text(
+                'flutter企业级应用框架',
+                style: AppTheme.caption,
+              ),
             )),
         body: TreeView(rootNode));
   }

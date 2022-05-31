@@ -1,37 +1,53 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:myplus/myplus.dart';
 
-import 'constans/app_constants.dart';
+import 'constans/constans.dart';
 import 'pages/p_login.dart';
 
 Future<void> main() async {
   /// 确保初始化
   WidgetsFlutterBinding.ensureInitialized();
 
-  // /// 自定义报错页面
-  // ErrorWidget.builder = (FlutterErrorDetails details) {
-  //   debugPrint(details.toString());
-  //   return const Material();
-  // };
-  runApp(const MyApp());
+  /// 自定义报错提示
+  ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) {
+    return const Material(
+      child: Center(
+        child: Text("出现错误了~"),
+      ),
+    );
+  };
 
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  await SystemChrome.setPreferredOrientations(<DeviceOrientation>[DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-  static const title = 'flutter企业级管理框架';
+  static const title = 'flutter企业级UI管理框架';
   @override
   Widget build(BuildContext context) {
-    Cfg().allExpand = true;
+    ///树展开
+    Trees().allExpand = true;
+
+    ///
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: !kIsWeb && Platform.isAndroid ? Brightness.dark : Brightness.light,
+      systemNavigationBarColor: Colors.white,
+      systemNavigationBarDividerColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ));
     return MaterialApp(
       title: title,
       theme: ThemeData(
-        scaffoldBackgroundColor: AppConstans.bgColor,
-        hintColor: Colors.grey.withOpacity(0.3),
-        splashColor: Colors.transparent,
+        primarySwatch: Colors.blue,
+        textTheme: AppTheme.textTheme,
+        platform: TargetPlatform.iOS,
         canvasColor: Colors.transparent,
+        scaffoldBackgroundColor: AppTheme.notWhite,
       ),
       debugShowCheckedModeBanner: false,
       routes: {

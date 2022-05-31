@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../constans/app_constants.dart';
+import '../constans/constans.dart';
 import 'home.dart';
 
 FocusNode userFocusNode = FocusNode();
@@ -139,7 +138,7 @@ class _PLoginState extends State<PLogin> {
           },
           child: const Text(
             '登录',
-            style: TextStyle(color: AppConstans.btTextColor),
+            style: TextStyle(color: AppTheme.lightText),
           ),
         ),
       ),

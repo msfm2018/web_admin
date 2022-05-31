@@ -28,22 +28,20 @@ class _P3State extends State<P3> {
             stream: ss.stream,
             initialData: '---',
             builder: (context, snapshot) {
-              return Text((Cfg().memoryPageViewDataObject[widget.name]) == null
-                  ? ""
-                  : (Cfg().memoryPageViewDataObject[widget.name]).myTitle);
+              return Text((Trees().memoryPageViewDataObject[widget.name]) == null ? "" : (Trees().memoryPageViewDataObject[widget.name]).myTitle);
             }),
-        Text('页面p3'),
-        TextButton.icon(
-            onPressed: ff, icon: Icon(Icons.abc), label: Text('测试持久化value'))
+        SizedBox(
+          width: 50,
+        ),
+        OutlinedButton.icon(onPressed: ff, icon: Icon(Icons.abc), label: Text('测试持久化value')),
       ],
     ));
   }
 
   void ff() {
-    (Cfg().memoryPageViewDataObject[widget.name]).myTitle =
-        '值:' + (Cfg().memoryPageViewDataObject[widget.name]).i.toString() + '';
-    ss.add((Cfg().memoryPageViewDataObject[widget.name]).myTitle);
+    (Trees().memoryPageViewDataObject[widget.name]).myTitle = '值:' + (Trees().memoryPageViewDataObject[widget.name]).i.toString() + '';
+    ss.add((Trees().memoryPageViewDataObject[widget.name]).myTitle);
 
-    (Cfg().memoryPageViewDataObject[widget.name]).i++;
+    (Trees().memoryPageViewDataObject[widget.name]).i++;
   }
 }
