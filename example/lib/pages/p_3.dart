@@ -28,7 +28,7 @@ class _P3State extends State<P3> {
             stream: ss.stream,
             initialData: '---',
             builder: (context, snapshot) {
-              return Text((Trees().memoryPageViewDataObject[widget.name]) == null ? "" : (Trees().memoryPageViewDataObject[widget.name]).myTitle);
+              return Text((Trees().corePageViewClassData[widget.name]) == null ? "" : (Trees().corePageViewClassData[widget.name]).myTitle);
             }),
         SizedBox(
           width: 50,
@@ -39,9 +39,9 @@ class _P3State extends State<P3> {
   }
 
   void ff() {
-    (Trees().memoryPageViewDataObject[widget.name]).myTitle = '值:' + (Trees().memoryPageViewDataObject[widget.name]).i.toString() + '';
-    ss.add((Trees().memoryPageViewDataObject[widget.name]).myTitle);
+    (Trees().corePageViewClassData[widget.name]).myTitle = '值:' + (Trees().corePageViewClassData[widget.name]).i.toString() + '';
+    ss.add((Trees().corePageViewClassData[widget.name]).myTitle);
 
-    (Trees().memoryPageViewDataObject[widget.name]).i++;
+    (Trees().corePageViewClassData[widget.name]).i++;
   }
 }

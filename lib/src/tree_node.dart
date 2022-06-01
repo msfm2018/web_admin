@@ -6,20 +6,20 @@ import 'object_bean.dart';
 enum NodeState { nsExpanded, nsSelected, nsFocused }
 
 class TreeNode<T> {
-  bool expand;
+  bool isExpanded;
   int depth;
   bool isLeaf;
   int nodeId;
   int fatherId;
 
-  ///叶图标
-  Icon? icon;
+  ///leaf图标
+  Icon? leafIcon;
 
   ///目录折叠图标
-  Icon? dirUnSelectIcon;
+  Icon? directoryUnSelectedIcon;
 
   ///目录展开图标
-  Icon? dirSelectIcon;
+  Icon? directorySelectedIcon;
 
   ///目录节点 还是Widget leaf节点
   T object;
@@ -31,10 +31,10 @@ class TreeNode<T> {
     this.nodeId,
     this.fatherId,
     this.object, {
-    this.icon,
-    this.dirUnSelectIcon,
-    this.dirSelectIcon,
-    this.expand = false,
+    this.leafIcon,
+    this.directoryUnSelectedIcon,
+    this.directorySelectedIcon,
+    this.isExpanded = false,
     this.selectedIndex = -1,
   });
 }
@@ -100,7 +100,7 @@ class TreeNodes {
       if (!_dirtyNodes.contains(node.nodeId)) {
         tmp.add(node);
       } else {
-        node.expand = false;
+        node.isExpanded = false;
       }
     }
     expandNodes.clear();
@@ -123,10 +123,10 @@ class TreeNodes {
 
   void dataParse(DirectoryNode dir, {int depth = 0, int fatherId = -1}) {
     int currentId = nodeId;
-    if (Trees().allExpand) {
-      treeNodes.add(TreeNode(depth, false, nodeId++, fatherId, dir, expand: true, dirSelectIcon: dir.dirSelectedIcon, dirUnSelectIcon: dir.dirUnSelectedIcon));
+    if (Trees().isAllExpanded) {
+      treeNodes.add(TreeNode(depth, false, nodeId++, fatherId, dir, isExpanded: true, directorySelectedIcon: dir.dirSelectedIcon, directoryUnSelectedIcon: dir.dirUnSelectedIcon));
     } else {
-      treeNodes.add(TreeNode(depth, false, nodeId++, fatherId, dir, dirSelectIcon: dir.dirSelectedIcon, dirUnSelectIcon: dir.dirUnSelectedIcon));
+      treeNodes.add(TreeNode(depth, false, nodeId++, fatherId, dir, directorySelectedIcon: dir.dirSelectedIcon, directoryUnSelectedIcon: dir.dirUnSelectedIcon));
     }
 
     for (LeafNode leaf in dir.leafs) {

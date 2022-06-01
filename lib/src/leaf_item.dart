@@ -10,7 +10,7 @@ class LeafItem extends StatefulWidget {
   Color? textColor;
   Color? bgColor;
   final double textSize;
-  itemOnTap itemOnTap1;
+  OnItemTap itemOnTap1;
   TreeNode node;
 
   LeafItem(this.image, this.title, this.bgColor, this.itemOnTap1, this.node, {Key? key, this.left = 0, this.textColor = Colors.grey, this.textSize = 16}) : super(key: key);

@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ///树展开
-    Trees().allExpand = true;
+    Trees().isAllExpanded = true;
 
     ///
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -47,6 +47,7 @@ class MyApp extends StatelessWidget {
         textTheme: AppTheme.textTheme,
         platform: TargetPlatform.iOS,
         canvasColor: Colors.transparent,
+        textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.green),
         scaffoldBackgroundColor: AppTheme.notWhite,
       ),
       debugShowCheckedModeBanner: false,

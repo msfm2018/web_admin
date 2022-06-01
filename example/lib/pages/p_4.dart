@@ -20,7 +20,8 @@ class _MyHomePageState extends State<P4> with AutomaticKeepAliveClientMixin, Wid
 
     WidgetsBinding.instance.addObserver(this);
     debugPrint('initState');
-    _controller = TextEditingController(text: (Trees().memoryPageViewDataObject[widget.name]).editText);
+    print(Trees().corePageViewClassData[widget.name]);
+    _controller = TextEditingController(text: (Trees().corePageViewClassData[widget.name]).editText);
   }
 
   @override
@@ -32,9 +33,9 @@ class _MyHomePageState extends State<P4> with AutomaticKeepAliveClientMixin, Wid
   void _incrementCounter() {
     setState(() {
       counter++;
-      (Trees().memoryPageViewDataObject[widget.name]).testint = counter;
-      (Trees().memoryPageViewDataObject[widget.name]).editText = _controller.text;
-      (Trees().memoryPageViewDataObject[widget.name]).a = _controller.text;
+      (Trees().corePageViewClassData[widget.name]).testint = counter;
+      (Trees().corePageViewClassData[widget.name]).editText = _controller.text;
+      (Trees().corePageViewClassData[widget.name]).a = _controller.text;
     });
   }
 
@@ -50,7 +51,7 @@ class _MyHomePageState extends State<P4> with AutomaticKeepAliveClientMixin, Wid
     print('p-4');
     return Scaffold(
       appBar: AppBar(
-        title: Text(Trees().memoryPageViewDataObject[widget.name] == null ? '' : (Trees().memoryPageViewDataObject[widget.name]).a),
+        title: Text(Trees().corePageViewClassData[widget.name] == null ? '' : (Trees().corePageViewClassData[widget.name]).a),
         // title: Text('${Cfg().testint}'),
       ),
       body: Center(
@@ -61,13 +62,13 @@ class _MyHomePageState extends State<P4> with AutomaticKeepAliveClientMixin, Wid
               'You have pushed the button this many times:',
             ),
             Text(
-              'OhMygod--${(Trees().memoryPageViewDataObject[widget.name]).testint}',
+              'OhMygod--${(Trees().corePageViewClassData[widget.name]).testint}',
               style: Theme.of(context).textTheme.headline4,
             ),
             TextFormField(
               controller: _controller,
               onChanged: (v) {
-                (Trees().memoryPageViewDataObject[widget.name]).editText = v;
+                (Trees().corePageViewClassData[widget.name]).editText = v;
               },
               // initialValue: Cfg().editText, // 'TextFormField - $counter',
             )
@@ -86,6 +87,8 @@ class _MyHomePageState extends State<P4> with AutomaticKeepAliveClientMixin, Wid
   void dispose() {
     print('dispose p_4');
     WidgetsBinding.instance.removeObserver(this); //销毁
+    _controller.dispose();
+
     super.dispose();
   }
 
