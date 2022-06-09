@@ -6,6 +6,7 @@
 
 编译环境 flutter3 vscode
 
+config文件夹下面配置 业务页面 
 
 
 ![image](https://github.com/msfm2018/treexe/blob/v1.5/index.png)
