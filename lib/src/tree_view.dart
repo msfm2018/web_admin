@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'object_bean.dart';
 import 'leaf_item.dart';
 import 'tree_node.dart';
-import 'tree.dart';
+import 'mgr.dart';
 
 late ScrollController _scrollController;
 late ScrollController _scrollController2;
@@ -29,7 +29,7 @@ class _TreeViewState extends State<TreeView> {
     _scrollController2.addListener(() {});
     toolbarColorChangeNotify = StreamController<String>.broadcast();
     TreeNodes().dataParses(widget.directoryNodes);
-    if (Trees().isAllExpanded) {
+    if (Mgr().isAllExpanded) {
       // 全部展开
       TreeNodes().expandAll();
     } else {
@@ -50,14 +50,14 @@ class _TreeViewState extends State<TreeView> {
             node.isLeaf
 
                 ///选中 图标与字体一起变色
-                ? (node.object is LeafNode) && (node.object as LeafNode).leafName == selectedNodeName
-                    ? (node.object as LeafNode).leafSelectedIcon ??
+                ? (node.object is LeafNode) && (node.object as LeafNode).name == selectedNodeName
+                    ? (node.object as LeafNode).selectedIcon ??
                         const Icon(
                           Icons.description_outlined,
                           size: 20,
                           // color: selectColor,
                         )
-                    : (node.object as LeafNode).leafUnSelectedIcon ??
+                    : (node.object as LeafNode).unSelectedIcon ??
                         const Icon(
                           Icons.description_outlined,
                           size: 20,
@@ -70,13 +70,13 @@ class _TreeViewState extends State<TreeView> {
                     : node.directoryUnSelectedIcon ?? const Icon(Icons.arrow_circle_down_sharp, size: 20),
 
             ///name     页节点 目录节点 名称 与颜色
-            node.isLeaf ? (node.object as LeafNode).leafName : (node.object as DirectoryNode).name,
+            node.isLeaf ? (node.object as LeafNode).name : (node.object as DirectoryNode).name,
 
             ///  bgColor
-            (node.object is LeafNode) && (node.object as LeafNode).leafName == selectedNodeName ? selectedColor : unSelectedColor,
+            (node.object is LeafNode) && (node.object as LeafNode).name == selectedNodeName ? selectedColor : unSelectedColor,
 
             ///
-            textColor: (node.object is LeafNode) && (node.object as LeafNode).leafName == selectedNodeName ? selectedColor : unSelectedColor,
+            textColor: (node.object is LeafNode) && (node.object as LeafNode).name == selectedNodeName ? selectedColor : unSelectedColor,
             itemOnTap, node,
 
             ///树缩进
@@ -92,9 +92,9 @@ class _TreeViewState extends State<TreeView> {
   void itemOnTap(TreeNode<dynamic> node) {
     node.isLeaf
         ? {
-            Trees().savePageView((node) => pressButton(node, (node.object as LeafNode).leafName, openViewPage, delViewPage), node),
-            selectedNodeName = (node.object as LeafNode).leafName,
-            Trees().shareKey = selectedNodeName,
+            Mgr().savePage((node) => pressButton(node, (node.object as LeafNode).name, openPage, delPage), node),
+            selectedNodeName = (node.object as LeafNode).name,
+            Mgr().shareKey = selectedNodeName,
 
             ///选中节点消息通知
             toolbarColorChangeNotify.add(selectedNodeName),
@@ -103,19 +103,19 @@ class _TreeViewState extends State<TreeView> {
             if (node.isExpanded) {node.isExpanded = false, TreeNodes().collapse(node.nodeId)} else {node.isExpanded = true, TreeNodes().expand(node.nodeId)},
           };
 
-    Trees().notifyUi();
+    Mgr().notifyUi();
   }
 
-  void openViewPage(name) {
-    Trees().shareKey = name;
-    Trees().notifyUi();
+  void openPage(name) {
+    Mgr().shareKey = name;
+    Mgr().notifyUi();
   }
 
-  Future<void> delViewPage(name) async {
-    await Trees().delPageView(name).then((value) => selectedNodeName = value);
+  Future<void> delPage(name) async {
+    await Mgr().delPage(name).then((value) => selectedNodeName = value);
 
     toolbarColorChangeNotify.add(selectedNodeName);
-    Trees().notifyUi();
+    Mgr().notifyUi();
   }
 
   @override
@@ -252,7 +252,7 @@ class _TreeViewState extends State<TreeView> {
                     StreamBuilder(
 
                         ///画树
-                        stream: Trees().treeStreamControl.stream,
+                        stream: Mgr().outer,
                         builder: (context, snapshot) {
                           return Column(mainAxisAlignment: MainAxisAlignment.start, children: _buildNode(TreeNodes().expandNodes));
                         }),
@@ -273,18 +273,18 @@ class _TreeViewState extends State<TreeView> {
               ///
               Expanded(
                   child: Container(
-                color: Trees().rightPanelColor,
+                color: Mgr().rightPanelColor,
                 height: double.infinity,
                 child: StreamBuilder(
                   ///画toolbar
-                  stream: Trees().treeStreamControl.stream,
+                  stream: Mgr().outer,
                   builder: (context, snapshot) {
                     return Column(
                       children: [
                         Container(
-                            height: Trees().toolbarHeight,
+                            height: Mgr().toolbarHeight,
                             decoration: BoxDecoration(
-                              color: Trees().toolbarColor,
+                              color: Mgr().toolbarColor,
                               borderRadius: const BorderRadius.all(Radius.circular(6)),
                             ),
 
@@ -296,7 +296,7 @@ class _TreeViewState extends State<TreeView> {
                               child: Row(
                                 children: [
                                   //标题快捷按钮
-                                  for (var i = 0; i < Trees().corePageViewAction.values.toList().length; i++) Trees().corePageViewAction.values.toList()[i],
+                                  for (var i = 0; i < Mgr().vWidgetAction.values.toList().length; i++) Mgr().vWidgetAction.values.toList()[i],
                                 ],
                               ),
                             )
@@ -304,7 +304,7 @@ class _TreeViewState extends State<TreeView> {
 
                             ///
                             ),
-                        Expanded(child: Trees().corePageView[Trees().shareKey] ?? Container()),
+                        Expanded(child: Mgr().vWidget[Mgr().shareKey] ?? Container()),
                       ],
                     );
                   },

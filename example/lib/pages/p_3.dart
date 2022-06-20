@@ -28,20 +28,20 @@ class _P3State extends State<P3> {
             stream: ss.stream,
             initialData: '---',
             builder: (context, snapshot) {
-              return Text((Trees().corePageViewClassData[widget.name]) == null ? "" : (Trees().corePageViewClassData[widget.name]).myTitle);
+              return Text(m(widget.name) == null ? "" : m(widget.name).myTitle);
             }),
-        SizedBox(
+        const SizedBox(
           width: 50,
         ),
-        OutlinedButton.icon(onPressed: ff, icon: Icon(Icons.abc), label: Text('测试持久化value')),
+        OutlinedButton.icon(onPressed: ff, icon: const Icon(Icons.abc), label: const Text('测试持久化value')),
       ],
     ));
   }
 
   void ff() {
-    (Trees().corePageViewClassData[widget.name]).myTitle = '值:' + (Trees().corePageViewClassData[widget.name]).i.toString() + '';
-    ss.add((Trees().corePageViewClassData[widget.name]).myTitle);
+    m(widget.name).myTitle = '值:' + m(widget.name).i.toString() + '';
+    ss.add(m(widget.name).myTitle);
 
-    (Trees().corePageViewClassData[widget.name]).i++;
+    m(widget.name).i++;
   }
 }

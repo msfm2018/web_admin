@@ -11,18 +11,17 @@ class DirectoryNode {
   String name;
 
   ///目录展开图标
-  Icon? dirSelectedIcon;
+  Icon? selectedIcon;
 
   ///目录折叠图标
-  Icon? dirUnSelectedIcon;
+  Icon? unSelectedIcon;
 
-  DirectoryNode(this.childDirectoryNodes, this.leafs, this.name,
-      {this.dirSelectedIcon, this.dirUnSelectedIcon});
+  DirectoryNode(this.childDirectoryNodes, this.leafs, this.name, {this.selectedIcon, this.unSelectedIcon});
 }
 
 class LeafNode<T> {
   ///叶节点名称
-  String leafName;
+  String name;
 
   /// Widget ;
   T object;
@@ -31,15 +30,11 @@ class LeafNode<T> {
   T? clas;
 
   ///叶节点选中图标
-  Icon? leafSelectedIcon;
+  Icon? selectedIcon;
 
   ///叶节点未选中图标
-  Icon? leafUnSelectedIcon;
+  Icon? unSelectedIcon;
 
   ///this.object Widget
-  LeafNode(this.object,
-      {required this.leafName,
-      this.clas,
-      this.leafSelectedIcon,
-      this.leafUnSelectedIcon});
+  LeafNode(this.object, {required this.name, this.clas, this.selectedIcon, this.unSelectedIcon});
 }

@@ -62,78 +62,78 @@ var twoNode = [
       ///定义子节点
       [
         LeafNode(P1('人脸检测'),
-            leafName: "人脸检测",
+            name: "人脸检测",
             clas: P1Data(),
-            leafSelectedIcon: const Icon(
+            selectedIcon: const Icon(
               Icons.abc,
               color: AppTheme.selectColor,
             ),
-            leafUnSelectedIcon: const Icon(
+            unSelectedIcon: const Icon(
               Icons.abc,
               color: AppTheme.unSelectColor,
             )),
         LeafNode(PMultipage(),
-            leafName: "多页文档",
-            leafSelectedIcon: const Icon(
+            name: "多页文档",
+            selectedIcon: const Icon(
               Icons.abc,
               color: AppTheme.selectColor,
             ),
-            leafUnSelectedIcon: const Icon(
+            unSelectedIcon: const Icon(
               Icons.abc,
               color: AppTheme.unSelectColor,
             )),
         LeafNode(PPassword(),
-            leafName: "密码强度提示",
+            name: "密码强度提示",
             clas: P1Data(),
-            leafSelectedIcon: const Icon(
+            selectedIcon: const Icon(
               Icons.abc,
               color: AppTheme.selectColor,
             ),
-            leafUnSelectedIcon: const Icon(
+            unSelectedIcon: const Icon(
               Icons.abc,
               color: AppTheme.unSelectColor,
             )),
         LeafNode(const PBarcode(),
-            leafName: "生成二维码",
+            name: "生成二维码",
             clas: P1Data(),
-            leafSelectedIcon: const Icon(
+            selectedIcon: const Icon(
               Icons.abc,
               color: AppTheme.selectColor,
             ),
-            leafUnSelectedIcon: const Icon(
+            unSelectedIcon: const Icon(
               Icons.abc,
               color: AppTheme.unSelectColor,
             )),
         LeafNode(const FriendCircle(data: friendCircleData),
-            leafName: "朋友圈",
+            name: "朋友圈",
             clas: P1Data(),
-            leafSelectedIcon: const Icon(
+            selectedIcon: const Icon(
               Icons.abc,
               color: AppTheme.selectColor,
             ),
-            leafUnSelectedIcon: const Icon(
+            unSelectedIcon: const Icon(
               Icons.abc,
               color: AppTheme.unSelectColor,
             )),
         LeafNode(const PMaps(),
-            leafName: "地图",
+            name: "地图",
             clas: P1Data(),
-            leafSelectedIcon: const Icon(
+            selectedIcon: const Icon(
               Icons.abc,
               color: AppTheme.selectColor,
             ),
-            leafUnSelectedIcon: const Icon(
+            unSelectedIcon: const Icon(
               Icons.abc,
               color: AppTheme.unSelectColor,
             )),
         LeafNode(PSignaturePad(),
-            leafName: "手写签名",
+            name: "手写签名",
             clas: P1Data(),
-            leafSelectedIcon: const Icon(
+            selectedIcon: const Icon(
               Icons.abc,
               color: AppTheme.selectColor,
             ),
-            leafUnSelectedIcon: const Icon(
+            unSelectedIcon: const Icon(
               Icons.abc,
               color: AppTheme.unSelectColor,
             )),
@@ -141,11 +141,11 @@ var twoNode = [
 
       ///
       "部门管理",
-      dirSelectedIcon: const Icon(
+      selectedIcon: const Icon(
         Icons.device_hub,
         color: Colors.yellow,
       ),
-      dirUnSelectedIcon: const Icon(
+      unSelectedIcon: const Icon(
         Icons.device_hub,
         color: Colors.red,
       )),
@@ -162,85 +162,85 @@ var rootNode = [
       [
         ///叶节点
         LeafNode(const PDataGrid1(),
-            leafName: "数据管理",
-            leafSelectedIcon: const Icon(
+            name: "数据管理",
+            selectedIcon: const Icon(
               Icons.read_more,
             ),
-            leafUnSelectedIcon: const Icon(
+            unSelectedIcon: const Icon(
               Icons.read_more_outlined,
             )),
 
         ///叶节点
         LeafNode(PChart(),
-            leafName: "图表",
-            leafSelectedIcon: const Icon(
+            name: "图表",
+            selectedIcon: const Icon(
               Icons.trending_up,
             ),
-            leafUnSelectedIcon: const Icon(
+            unSelectedIcon: const Icon(
               Icons.trending_up,
             )),
         LeafNode(CodeBookHomePage(),
-            leafName: "IM",
-            leafSelectedIcon: const Icon(
+            name: "IM",
+            selectedIcon: const Icon(
               Icons.trending_up,
             ),
-            leafUnSelectedIcon: const Icon(
+            unSelectedIcon: const Icon(
               Icons.trending_up,
             )),
 
         ///叶节点
         LeafNode(const CreatePdfWidget(),
-            leafName: "生成PDF文件",
-            leafSelectedIcon: const Icon(
+            name: "生成PDF文件",
+            selectedIcon: const Icon(
               Icons.functions,
             ),
-            leafUnSelectedIcon: const Icon(
+            unSelectedIcon: const Icon(
               Icons.functions,
             )),
 
         ///
         LeafNode(const PdfView(),
-            leafName: "PDF查看",
-            leafSelectedIcon: const Icon(
+            name: "PDF查看",
+            selectedIcon: const Icon(
               Icons.functions,
             ),
-            leafUnSelectedIcon: const Icon(
+            unSelectedIcon: const Icon(
               Icons.functions,
             )),
 
         ///
         LeafNode(
           const P2(),
-          leafName: "用户管理",
+          name: "用户管理",
         ),
 
         ///
         LeafNode(P3('角色管理'),
-            leafName: "角色管理",
+            name: "角色管理",
             clas: P3Data(),
-            leafSelectedIcon: const Icon(
+            selectedIcon: const Icon(
               Icons.abc,
             ),
-            leafUnSelectedIcon: const Icon(
+            unSelectedIcon: const Icon(
               Icons.abc,
             )),
 
         ///持久化数据
         LeafNode(P4(K4),
-            leafName: K4,
+            name: K4,
             clas: P4Data(),
-            leafSelectedIcon: const Icon(
+            selectedIcon: const Icon(
               Icons.abc,
             ),
-            leafUnSelectedIcon: const Icon(
+            unSelectedIcon: const Icon(
               Icons.abc,
             )),
       ],
 
       ///定义目录信息
       "首 页",
-      dirSelectedIcon: const Icon(Icons.device_hub, color: Colors.yellow),
-      dirUnSelectedIcon: const Icon(
+      selectedIcon: const Icon(Icons.device_hub, color: Colors.yellow),
+      unSelectedIcon: const Icon(
         Icons.device_hub,
         color: Colors.red,
       )

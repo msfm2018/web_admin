@@ -20,8 +20,8 @@ class _MyHomePageState extends State<P4> with AutomaticKeepAliveClientMixin, Wid
 
     WidgetsBinding.instance.addObserver(this);
     debugPrint('initState');
-    print(Trees().corePageViewClassData[widget.name]);
-    _controller = TextEditingController(text: (Trees().corePageViewClassData[widget.name]).editText);
+    print(m(widget.name));
+    _controller = TextEditingController(text: m(widget.name).editText);
   }
 
   @override
@@ -33,15 +33,14 @@ class _MyHomePageState extends State<P4> with AutomaticKeepAliveClientMixin, Wid
   void _incrementCounter() {
     setState(() {
       counter++;
-      (Trees().corePageViewClassData[widget.name]).testint = counter;
-      (Trees().corePageViewClassData[widget.name]).editText = _controller.text;
-      (Trees().corePageViewClassData[widget.name]).a = _controller.text;
+      m(widget.name).testint = counter;
+      m(widget.name).editText = _controller.text;
+      m(widget.name).a = _controller.text;
     });
   }
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     print('chanage.....');
   }
@@ -51,24 +50,24 @@ class _MyHomePageState extends State<P4> with AutomaticKeepAliveClientMixin, Wid
     print('p-4');
     return Scaffold(
       appBar: AppBar(
-        title: Text(Trees().corePageViewClassData[widget.name] == null ? '' : (Trees().corePageViewClassData[widget.name]).a),
+        title: Text(m(widget.name) == null ? '' : m(widget.name).a),
         // title: Text('${Cfg().testint}'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            const Text(
               'You have pushed the button this many times:',
             ),
             Text(
-              'OhMygod--${(Trees().corePageViewClassData[widget.name]).testint}',
+              'OhMygod--${m(widget.name).testint}',
               style: Theme.of(context).textTheme.headline4,
             ),
             TextFormField(
               controller: _controller,
               onChanged: (v) {
-                (Trees().corePageViewClassData[widget.name]).editText = v;
+                m(widget.name).editText = v;
               },
               // initialValue: Cfg().editText, // 'TextFormField - $counter',
             )
@@ -78,7 +77,7 @@ class _MyHomePageState extends State<P4> with AutomaticKeepAliveClientMixin, Wid
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

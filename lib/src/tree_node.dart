@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'tree.dart';
+import 'mgr.dart';
 import 'object_bean.dart';
 
 enum NodeState { nsExpanded, nsSelected, nsFocused }
@@ -123,10 +123,10 @@ class TreeNodes {
 
   void dataParse(DirectoryNode dir, {int depth = 0, int fatherId = -1}) {
     int currentId = nodeId;
-    if (Trees().isAllExpanded) {
-      treeNodes.add(TreeNode(depth, false, nodeId++, fatherId, dir, isExpanded: true, directorySelectedIcon: dir.dirSelectedIcon, directoryUnSelectedIcon: dir.dirUnSelectedIcon));
+    if (Mgr().isAllExpanded) {
+      treeNodes.add(TreeNode(depth, false, nodeId++, fatherId, dir, isExpanded: true, directorySelectedIcon: dir.selectedIcon, directoryUnSelectedIcon: dir.unSelectedIcon));
     } else {
-      treeNodes.add(TreeNode(depth, false, nodeId++, fatherId, dir, directorySelectedIcon: dir.dirSelectedIcon, directoryUnSelectedIcon: dir.dirUnSelectedIcon));
+      treeNodes.add(TreeNode(depth, false, nodeId++, fatherId, dir, directorySelectedIcon: dir.selectedIcon, directoryUnSelectedIcon: dir.unSelectedIcon));
     }
 
     for (LeafNode leaf in dir.leafs) {

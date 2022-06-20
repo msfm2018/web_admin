@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ///树展开
-    Trees().isAllExpanded = true;
+    Mgr().isAllExpanded = true;
 
     ///
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
