@@ -9,4 +9,4 @@
 config文件夹下面配置 业务页面 
 
 
-![image](https://github.com/msfm2018/treexe/blob/v1.5/index.png)
+![image](https://github.com/msfm2018/treexe/blob/v2.1/index.png)
