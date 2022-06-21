@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+///数据节点
 class DirectoryNode {
   ///下级目录节点列表
   List<DirectoryNode> childDirectoryNodes;

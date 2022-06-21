@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'object_bean.dart';
-import 'leaf_item.dart';
+import 'node_data.dart';
 import 'tree_node.dart';
 import 'mgr.dart';
 
@@ -28,7 +28,7 @@ class _TreeViewState extends State<TreeView> {
     _scrollController.addListener(() {});
     _scrollController2.addListener(() {});
     toolbarColorChangeNotify = StreamController<String>.broadcast();
-    TreeNodes().dataParses(widget.directoryNodes);
+    TreeNodes().loadData(widget.directoryNodes);
     if (Mgr().isAllExpanded) {
       // 全部展开
       TreeNodes().expandAll();
@@ -46,28 +46,33 @@ class _TreeViewState extends State<TreeView> {
       for (TreeNode node in nodes) {
         widgets.add(
           //
-          LeafItem(
+          NodeData(
             node.isLeaf
 
                 ///选中 图标与字体一起变色
                 ? (node.object is LeafNode) && (node.object as LeafNode).name == selectedNodeName
                     ? (node.object as LeafNode).selectedIcon ??
                         const Icon(
-                          Icons.description_outlined,
-                          size: 20,
-                          // color: selectColor,
+                          Icons.brightness_1,
+                          color: Colors.green, // Color(0xff28c0C6),
+                          size: 12,
                         )
                     : (node.object as LeafNode).unSelectedIcon ??
                         const Icon(
-                          Icons.description_outlined,
-                          size: 20,
-                          // color: unSelectColor,
+                          Icons.brightness_1_sharp,
+                          color: Color(0xff28c0C6),
+                          size: 12,
                         )
 
                 ///目录节点  开合图标
                 : node.isExpanded
-                    ? node.directorySelectedIcon ?? const Icon(Icons.swap_vert_circle_outlined, size: 20)
-                    : node.directoryUnSelectedIcon ?? const Icon(Icons.arrow_circle_down_sharp, size: 20),
+                    ? node.directorySelectedIcon ??
+                        const Icon(
+                          Icons.keyboard_arrow_up,
+                          size: 20,
+                          color: Colors.green,
+                        )
+                    : node.directoryUnSelectedIcon ?? const Icon(Icons.keyboard_arrow_down, size: 20, color: Color(0xff28c0C6)),
 
             ///name     页节点 目录节点 名称 与颜色
             node.isLeaf ? (node.object as LeafNode).name : (node.object as DirectoryNode).name,
@@ -76,12 +81,14 @@ class _TreeViewState extends State<TreeView> {
             (node.object is LeafNode) && (node.object as LeafNode).name == selectedNodeName ? selectedColor : unSelectedColor,
 
             ///
-            textColor: (node.object is LeafNode) && (node.object as LeafNode).name == selectedNodeName ? selectedColor : unSelectedColor,
+            textColor: (node.object is LeafNode) && (node.object as LeafNode).name == selectedNodeName ? Colors.white : const Color(0xFF253840),
             itemOnTap, node,
+
+            ///节点是叶节点还是目录节点
+            isLeaf: node.isLeaf ? true : false,
 
             ///树缩进
             // left: (node.object is LeafNode) ? node.depth * 20.0 : 0,
-            left: (node.object is LeafNode) ? 20.0 : 0,
           ),
         );
       }
@@ -238,81 +245,69 @@ class _TreeViewState extends State<TreeView> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      child: Row(children: [
+      child: Row(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
         //左树 右pageView
-        Expanded(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                controller: _scrollController,
-                child: Column(
-                  children: [
-                    StreamBuilder(
+        SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          controller: _scrollController,
+          child: StreamBuilder(
 
-                        ///画树
-                        stream: Mgr().outer,
-                        builder: (context, snapshot) {
-                          return Column(mainAxisAlignment: MainAxisAlignment.start, children: _buildNode(TreeNodes().expandNodes));
-                        }),
-                  ],
-                ),
-              ),
-
-              SizedBox(
-                width: 2,
-                child: VerticalDivider(
-                  thickness: 1,
-                  indent: 0, //起点缩进距离
-                  endIndent: 0, //终点缩进距离
-                  color: Colors.red.withOpacity(0.6), //是指分割线颜色
-                ),
-              ),
-
-              ///
-              Expanded(
-                  child: Container(
-                color: Mgr().rightPanelColor,
-                height: double.infinity,
-                child: StreamBuilder(
-                  ///画toolbar
-                  stream: Mgr().outer,
-                  builder: (context, snapshot) {
-                    return Column(
-                      children: [
-                        Container(
-                            height: Mgr().toolbarHeight,
-                            decoration: BoxDecoration(
-                              color: Mgr().toolbarColor,
-                              borderRadius: const BorderRadius.all(Radius.circular(6)),
-                            ),
-
-                            ///创建快捷button
-                            child: SingleChildScrollView(
-                              controller: _scrollController2,
-                              primary: false,
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: [
-                                  //标题快捷按钮
-                                  for (var i = 0; i < Mgr().vWidgetAction.values.toList().length; i++) Mgr().vWidgetAction.values.toList()[i],
-                                ],
-                              ),
-                            )
-                            //)
-
-                            ///
-                            ),
-                        Expanded(child: Mgr().vWidget[Mgr().shareKey] ?? Container()),
-                      ],
-                    );
-                  },
-                ),
-              )),
-            ],
+              ///画树
+              stream: Mgr().outer,
+              builder: (context, snapshot) {
+                return Column(children: _buildNode(TreeNodes().expandNodes));
+              }),
+        ),
+        SizedBox(
+          width: 2,
+          child: VerticalDivider(
+            thickness: 1,
+            indent: 0, //起点缩进距离
+            endIndent: 0, //终点缩进距离
+            color: Colors.red.withOpacity(0.6), //是指分割线颜色
           ),
-        )
+        ),
+
+        ///
+        Expanded(
+            child: Container(
+          color: Mgr().rightPanelColor,
+          height: double.infinity,
+          child: StreamBuilder(
+            ///画toolbar
+            stream: Mgr().outer,
+            builder: (context, snapshot) {
+              return Column(
+                children: [
+                  Container(
+                      height: Mgr().toolbarHeight,
+                      decoration: BoxDecoration(
+                        color: Mgr().toolbarColor,
+                        borderRadius: const BorderRadius.all(Radius.circular(6)),
+                      ),
+
+                      ///创建快捷button
+                      child: SingleChildScrollView(
+                        controller: _scrollController2,
+                        primary: false,
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            //标题快捷按钮
+                            for (var i = 0; i < Mgr().vWidgetAction.values.toList().length; i++) Mgr().vWidgetAction.values.toList()[i],
+                          ],
+                        ),
+                      )
+                      //)
+
+                      ///
+                      ),
+                  Expanded(child: Mgr().vWidget[Mgr().shareKey] ?? Container()),
+                ],
+              );
+            },
+          ),
+        ))
       ]),
     );
   }

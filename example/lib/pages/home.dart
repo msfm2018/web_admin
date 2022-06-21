@@ -15,16 +15,17 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(30.0),
-            child: AppBar(
-              automaticallyImplyLeading: false,
-              elevation: 1.5,
-              title: const Text(
-                'flutter企业级应用框架',
-                style: AppTheme.caption,
-              ),
-            )),
+        // appBar: PreferredSize(
+        //     preferredSize: const Size.fromHeight(30.0),
+        //     child: AppBar(
+        //       automaticallyImplyLeading: false,
+        //       elevation: 1.5,
+        //       backgroundColor: const Color(0xff28c0C6),
+        //       title: const Text(
+        //         'flutter企业级应用框架',
+        //         style: AppTheme.caption,
+        //       ),
+        //     )),
         body: TreeView(rootNode));
   }
 }

@@ -14,7 +14,7 @@ extension GetResetExt on Map {
   void onDisposeKey(String key, Map<String, dynamic> map) {
     map.forEach((key1, value) {
       if (key1 == key) {
-        value.destroy();
+        value?.destroy();
       }
     });
   }

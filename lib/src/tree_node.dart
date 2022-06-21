@@ -81,23 +81,23 @@ class TreeNodes {
   }
 
   void collapse(int id) {
-    var _dirtyNodes = <int>[];
+    var dirtyNodes = <int>[];
     void _markDirty(int id) {
       for (TreeNode node in expandNodes) {
         if (id == node.fatherId) {
           if (!node.isLeaf) {
             _markDirty(node.nodeId);
           }
-          _dirtyNodes.add(node.nodeId);
+          dirtyNodes.add(node.nodeId);
         }
       }
     }
 
-    _dirtyNodes.clear();
+    dirtyNodes.clear();
     _markDirty(id);
     List<TreeNode> tmp = [];
     for (TreeNode node in expandNodes) {
-      if (!_dirtyNodes.contains(node.nodeId)) {
+      if (!dirtyNodes.contains(node.nodeId)) {
         tmp.add(node);
       } else {
         node.isExpanded = false;
@@ -115,7 +115,7 @@ class TreeNodes {
     }
   }
 
-  void dataParses(List<DirectoryNode> nodes) {
+  void loadData(List<DirectoryNode> nodes) {
     for (DirectoryNode dir in nodes) {
       dataParse(dir);
     }
