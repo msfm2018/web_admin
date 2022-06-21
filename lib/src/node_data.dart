@@ -1,77 +1,141 @@
-// ignore_for_file: must_be_immutable
-
+///模型   mvc
 import 'package:flutter/material.dart';
 
 import 'mgr.dart';
-import 'tree_node.dart';
+import 'entity.dart';
 
-class NodeData extends StatefulWidget {
-  final bool isLeaf;
+enum NodeState { nsExpanded, nsSelected, nsFocused }
 
-  ///选中的节点
-  final bool isSelected;
-  final double left;
-  final Icon image;
-  final String title;
-  Color? textColor;
-  Color? bgColor;
-  final double textSize;
-  OnItemTap itemOnTap1;
-  TreeNode node;
+class NodeData<T> {
+  bool isExpanded;
+  int depth;
+  bool isLeaf;
+  int nodeId;
+  int fatherId;
 
-  NodeData(this.image, this.title, this.bgColor, this.itemOnTap1, this.node, {Key? key, this.isSelected = false, this.isLeaf = true, this.left = 0, this.textColor = Colors.grey, this.textSize = 16})
-      : super(key: key);
+  ///leaf图标
+  Icon? leafIcon;
 
-  @override
-  State<NodeData> createState() => _NodeDataState();
+  ///目录折叠图标
+  Icon? directoryUnSelectedIcon;
+
+  ///目录展开图标
+  Icon? directorySelectedIcon;
+
+  ///目录节点 还是Widget leaf节点
+  T object;
+  int selectedIndex;
+
+  NodeData(
+    this.depth,
+    this.isLeaf,
+    this.nodeId,
+    this.fatherId,
+    this.object, {
+    this.leafIcon,
+    this.directoryUnSelectedIcon,
+    this.directorySelectedIcon,
+    this.isExpanded = false,
+    this.selectedIndex = -1,
+  });
 }
 
-class _NodeDataState extends State<NodeData> {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 200,
-      child: Column(
-        children: <Widget>[
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            decoration: BoxDecoration(color: widget.bgColor, borderRadius: const BorderRadius.only(bottomRight: Radius.circular(50), topRight: Radius.circular(50))),
-            child:
+class NodesDatas {
+  ///所有数据
+  late List<NodeData> treeNodes;
 
-                /// Material 关键点 响应 hoverColor
-                Material(
-                    child: ListTile(
-              dense: true,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(bottomRight: Radius.circular(50), topRight: Radius.circular(50)),
-              ),
-              title: Text(
-                widget.title,
-                style: TextStyle(
-                  // body1 -> body2
-                  fontFamily: 'WorkSans',
-                  fontWeight: FontWeight.w400,
-                  fontSize: widget.textSize,
-                  letterSpacing: 0.2,
-                  color: widget.textColor,
-                ),
-              ),
-              trailing: widget.isLeaf ? null : widget.image,
-              leading: widget.isLeaf ? widget.image : null,
-              hoverColor: Colors.blue.withOpacity(0.8),
-              enabled: true,
-              onTap: () {
-                widget.itemOnTap1(widget.node);
-              },
-            )
+  ///展开数据
+  late List<NodeData> expandNodes;
+  int nodeId = 1;
+  NodesDatas._() {
+    treeNodes = [];
+    expandNodes = [];
+    _h = this;
+  }
+  static NodesDatas? _h;
+  factory NodesDatas() {
+    return _h ??= NodesDatas._();
+  }
 
-                    ///
-                    ),
+  void expand(int id) {
+    List<NodeData> tmp = [];
+    for (NodeData node in treeNodes) {
+      if (node.fatherId == id) {
+        tmp.add(node);
+      }
+    }
+    //找到插入点
+    int index = -1;
+    int length = expandNodes.length;
+    for (int i = 0; i < length; i++) {
+      if (id == expandNodes[i].nodeId) {
+        index = i + 1;
+        break;
+      }
+    }
+    index = index == -1 ? 0 : index;
+    expandNodes.insertAll(index, tmp);
+  }
 
-            ///
-          ),
-        ],
-      ),
-    );
+  void expandAll() {
+    expandNodes.insertAll(0, treeNodes);
+  }
+
+  void collapse(int id) {
+    var dirtyNodes = <int>[];
+    void _markDirty(int id) {
+      for (NodeData node in expandNodes) {
+        if (id == node.fatherId) {
+          if (!node.isLeaf) {
+            _markDirty(node.nodeId);
+          }
+          dirtyNodes.add(node.nodeId);
+        }
+      }
+    }
+
+    dirtyNodes.clear();
+    _markDirty(id);
+    List<NodeData> tmp = [];
+    for (NodeData node in expandNodes) {
+      if (!dirtyNodes.contains(node.nodeId)) {
+        tmp.add(node);
+      } else {
+        node.isExpanded = false;
+      }
+    }
+    expandNodes.clear();
+    expandNodes.addAll(tmp);
+  }
+
+  void init() {
+    for (NodeData node in treeNodes) {
+      if (node.fatherId == -1) {
+        expandNodes.add(node);
+      }
+    }
+  }
+
+  void loadData(List<DirectoryNode> nodes) {
+    for (DirectoryNode dir in nodes) {
+      dataParse(dir);
+    }
+  }
+
+  void dataParse(DirectoryNode dir, {int depth = 0, int fatherId = -1}) {
+    int currentId = nodeId;
+    if (Mgr().isAllExpanded) {
+      treeNodes.add(NodeData(depth, false, nodeId++, fatherId, dir, isExpanded: true, directorySelectedIcon: dir.selectedIcon, directoryUnSelectedIcon: dir.unSelectedIcon));
+    } else {
+      treeNodes.add(NodeData(depth, false, nodeId++, fatherId, dir, directorySelectedIcon: dir.selectedIcon, directoryUnSelectedIcon: dir.unSelectedIcon));
+    }
+
+    for (LeafNode leaf in dir.leafs) {
+      treeNodes.add(NodeData(depth + 1, true, nodeId++, currentId, leaf));
+    }
+
+    for (DirectoryNode dr in dir.childDirectoryNodes) {
+      dataParse(dr, depth: depth + 1, fatherId: currentId);
+    }
   }
 }

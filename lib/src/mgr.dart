@@ -1,14 +1,14 @@
+///控制器
 import 'dart:async';
 import 'dart:math';
-// import 'dart:collection';
 import 'package:flutter/material.dart';
 
-import 'object_bean.dart';
-import 'tree_node.dart';
+import 'entity.dart';
+import 'node_data.dart';
 
 typedef Wb<T> = Widget Function(T);
 
-typedef OnItemTap = void Function(TreeNode<dynamic> node);
+typedef OnItemTap = void Function(NodeData<dynamic> node);
 
 extension GetResetExt on Map {
   void onDisposeKey(String key, Map<String, dynamic> map) {

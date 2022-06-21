@@ -26,6 +26,6 @@ class _MyHomePageState extends State<MyHomePage> {
         //         style: AppTheme.caption,
         //       ),
         //     )),
-        body: TreeView(rootNode));
+        body: TreeEntry(rootNode));
   }
 }
