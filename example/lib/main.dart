@@ -20,7 +20,10 @@ Future<void> main() async {
     );
   };
 
-  await SystemChrome.setPreferredOrientations(<DeviceOrientation>[DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) => runApp(const MyApp()));
+  await SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]).then((_) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -35,7 +38,8 @@ class MyApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
-      statusBarBrightness: !kIsWeb && Platform.isAndroid ? Brightness.dark : Brightness.light,
+      statusBarBrightness:
+          !kIsWeb && Platform.isAndroid ? Brightness.dark : Brightness.light,
       systemNavigationBarColor: Colors.white,
       systemNavigationBarDividerColor: Colors.transparent,
       systemNavigationBarIconBrightness: Brightness.dark,
@@ -47,12 +51,13 @@ class MyApp extends StatelessWidget {
         textTheme: AppTheme.textTheme,
         platform: TargetPlatform.iOS,
         canvasColor: Colors.transparent,
-        textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.green),
+        textSelectionTheme:
+            const TextSelectionThemeData(cursorColor: Colors.green),
         scaffoldBackgroundColor: AppTheme.notWhite,
       ),
       debugShowCheckedModeBanner: false,
       routes: {
-        '/': (context) => const PLogin(),
+        '/': (context) => PLogin(),
       },
     );
   }

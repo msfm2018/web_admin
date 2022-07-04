@@ -36,6 +36,7 @@ class Mgr extends State {
 
     ///
     _controler = StreamController.broadcast();
+    ratioControler = StreamController.broadcast();
   }
 
   static Mgr? _instance;
@@ -50,6 +51,10 @@ class Mgr extends State {
   }
 
   bool isAllExpanded = false;
+
+  ///树宽度比
+  num ratio = 1 / 8;
+  late StreamController<num> ratioControler;
 
   ///通知 重画树 画toolbar 的作用
   late StreamController<Mgr> _controler;
@@ -100,9 +105,11 @@ class Mgr extends State {
     } else {
       try {
         //pageView
-        vWidget.putIfAbsent((node.object as LeafNode).name, () => (node.object as LeafNode).object);
+        vWidget.putIfAbsent((node.object as LeafNode).name,
+            () => (node.object as LeafNode).object);
         //title button
-        vWidgetAction.putIfAbsent((node.object as LeafNode).name, () => b(node));
+        vWidgetAction.putIfAbsent(
+            (node.object as LeafNode).name, () => b(node));
       } catch (_) {}
     }
 
@@ -111,7 +118,8 @@ class Mgr extends State {
       // print('已经包容' + (node.object as LeafNode).name);
     } else {
       // print('放入' + (node.object as LeafNode).name);
-      _vWidgetData.putIfAbsent((node.object as LeafNode).name, () => node.object.clas);
+      _vWidgetData.putIfAbsent(
+          (node.object as LeafNode).name, () => node.object.clas);
     }
 
     for (var key in vWidget.keys) {
@@ -126,7 +134,8 @@ class Mgr extends State {
   String getRandom(int length) {
     const ch = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
     Random r = Random();
-    return String.fromCharCodes(Iterable.generate(length, (_) => ch.codeUnitAt(r.nextInt(ch.length))));
+    return String.fromCharCodes(
+        Iterable.generate(length, (_) => ch.codeUnitAt(r.nextInt(ch.length))));
   }
 
   @override
