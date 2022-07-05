@@ -125,13 +125,19 @@ class NodesDatas {
   void dataParse(DirectoryNode dir, {int depth = 0, int fatherId = -1}) {
     int currentId = nodeId;
     if (Mgr().isAllExpanded) {
-      treeNodes.add(NodeData(depth, false, nodeId++, fatherId, dir, isExpanded: true, directorySelectedIcon: dir.selectedIcon, directoryUnSelectedIcon: dir.unSelectedIcon));
+      treeNodes.add(NodeData(depth, false, nodeId++, fatherId, dir,
+          isExpanded: true,
+          directorySelectedIcon: dir.selectedIcon,
+          directoryUnSelectedIcon: dir.unSelectedIcon));
     } else {
-      treeNodes.add(NodeData(depth, false, nodeId++, fatherId, dir, directorySelectedIcon: dir.selectedIcon, directoryUnSelectedIcon: dir.unSelectedIcon));
+      treeNodes.add(NodeData(depth, false, nodeId++, fatherId, dir,
+          directorySelectedIcon: dir.selectedIcon,
+          directoryUnSelectedIcon: dir.unSelectedIcon));
     }
 
     for (LeafNode leaf in dir.leafs) {
       treeNodes.add(NodeData(depth + 1, true, nodeId++, currentId, leaf));
+      Mgr().leafNodes.add(leaf);
     }
 
     for (DirectoryNode dr in dir.childDirectoryNodes) {

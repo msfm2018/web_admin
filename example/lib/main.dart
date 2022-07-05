@@ -2,10 +2,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:mtest/home.dart';
 import 'package:myplus/myplus.dart';
 
 import 'constans/constans.dart';
-import 'pages/p_login.dart';
+import 'pages/BaseView/login.dart';
 
 Future<void> main() async {
   /// 确保初始化
@@ -57,7 +58,8 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       routes: {
-        '/': (context) => PLogin(),
+        '/': (context) => Login(),
+        'home': (context) => const Home(),
       },
     );
   }

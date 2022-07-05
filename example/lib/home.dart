@@ -4,16 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:mtest/package/toast/lib/toast.dart';
 import 'package:myplus/myplus.dart';
 
-import '../config/page_config.dart';
+import 'config/page_config.dart';
+import 'pages/BaseView/searchbar_delegate.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<Home> createState() => _HomeState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomeState extends State<Home> {
   late StreamController<bool> _controler1;
   var ratio = 1;
   @override
@@ -29,23 +30,43 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
         appBar: AppBar(
-          leading: StreamBuilder(
-              initialData: true,
-              stream: _controler1.stream,
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                return IconButton(
-                  icon: snapshot.data
-                      ? const Icon(Icons.arrow_left)
-                      : const Icon(Icons.arrow_right),
-                  onPressed: () {
-                    expandFlag
-                        ? Mgr().ratioControler.add(0.0001)
-                        : Mgr().ratioControler.add(Mgr().ratio);
-                    expandFlag = !expandFlag;
-                    _controler1.sink.add(expandFlag);
-                  },
-                );
-              }),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                searchList.clear();
+                Mgr().leafNodes.forEach((element) {
+                  searchList.add(element.name);
+                });
+                recentSuggest.clear();
+                recentSuggest.add(searchList[0]);
+                recentSuggest.add(searchList[1]);
+                showSearch(context: context, delegate: SearchBarDelegate());
+              },
+            )
+          ],
+          leading: Row(
+            children: [
+              StreamBuilder(
+                  initialData: true,
+                  stream: _controler1.stream,
+                  builder:
+                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    return IconButton(
+                      icon: snapshot.data
+                          ? const Icon(Icons.keyboard_arrow_left)
+                          : const Icon(Icons.keyboard_arrow_right),
+                      onPressed: () {
+                        expandFlag
+                            ? Mgr().ratioControler.add(0.0001)
+                            : Mgr().ratioControler.add(Mgr().ratio);
+                        expandFlag = !expandFlag;
+                        _controler1.sink.add(expandFlag);
+                      },
+                    );
+                  }),
+            ],
+          ),
         ),
         endDrawer: Drawer(
           backgroundColor: const Color(0xff777777),
@@ -79,6 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
+
         // appBar: PreferredSize(
         //     preferredSize: const Size.fromHeight(30.0),
         //     child: AppBar(

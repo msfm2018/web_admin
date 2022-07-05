@@ -50,6 +50,9 @@ class Mgr extends State {
     return _instance ?? Mgr._();
   }
 
+  ///整个数据
+  List<LeafNode> leafNodes = [];
+
   bool isAllExpanded = false;
 
   ///树宽度比
