@@ -1,4 +1,4 @@
-# v2.3
+# v2.7
 
 应用跑起来
 
@@ -9,4 +9,5 @@
 config文件夹下面配置 业务页面 
 
 
-![image](https://github.com/msfm2018/treexe/blob/v2.3/index.png)
+![image](https://github.com/msfm2018/treexe/blob/v2.7/index.png)
+![image](https://github.com/msfm2018/treexe/blob/v2.7/ix2.png)
