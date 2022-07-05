@@ -30,9 +30,9 @@ class Mgr extends State {
     _instance = this;
 
     /// 配对数据
-    vWidget = <String, Widget>{};
-    _vWidgetData = <String, dynamic>{};
-    vWidgetAction = <String, Widget>{};
+    vView = <String, Widget>{};
+    _vViewData = <String, dynamic>{};
+    vViewAction = <String, Widget>{};
 
     ///
     _controler = StreamController.broadcast();
@@ -62,40 +62,42 @@ class Mgr extends State {
   ///通知 重画树 画toolbar 的作用
   late StreamController<Mgr> _controler;
   get outer => _controler.stream;
+///////////////////////////////////////////////////
 
   ///页面临时pageView
-  late Map<String, Widget> vWidget;
+  late Map<String, Widget> vView;
 
   ///数据Persistence持久化
-  late Map<String, dynamic> _vWidgetData; //SplayTreeMap LinkedHashMap hashMap
-  get getData => _vWidgetData;
+  late Map<String, dynamic> _vViewData; //SplayTreeMap LinkedHashMap hashMap
+  get getData => _vViewData;
 
   ///内存节点快捷按钮
-  late Map<String, Widget> vWidgetAction;
+  late Map<String, Widget> vViewAction;
   // final HashMap<String, StreamBuild> dataBus = HashMap();
   /// 3个WidgetObj 共用一个 key 保证关联
   String shareKey = '';
 
+///////////////////////////////////////////////////////
   var rightPanelColor = Colors.white;
   var toolbarColor = const Color(0xFFFEFEFE);
   var toolbarHeight = 40.0;
 
   Future<String> delPage(name) async {
     print('删除' + name);
-    vWidget.remove(name);
-    vWidgetAction.remove(name);
+    vView.remove(name);
+    vViewAction.remove(name);
 
-    for (var key in vWidget.keys) {
+    for (var key in vView.keys) {
       print('————————————————————:::::' + key);
     }
 
     ///更新持久化数据 对象状态变化看上去flutter内存做了一些特殊处理 后面必须remove掉它 不然前端书写有可能报错 挺奇怪？
     ///清除对象数据
-    _vWidgetData.onDisposeKey(name, _vWidgetData);
-    _vWidgetData.remove(name);
+    _vViewData.onDisposeKey(name, _vViewData);
+    _vViewData.remove(name);
 
     ///
-    shareKey = vWidget.isEmpty ? shareKey : vWidget.keys.last;
+    shareKey = vView.isEmpty ? shareKey : vView.keys.last;
     return shareKey;
   }
 
@@ -104,28 +106,27 @@ class Mgr extends State {
     //   print('corePageView:::::' + key);
     // }
 
-    if (vWidget.containsKey((node.object as LeafNode).name)) {
+    if (vView.containsKey((node.object as LeafNode).name)) {
     } else {
       try {
         //pageView
-        vWidget.putIfAbsent((node.object as LeafNode).name,
+        vView.putIfAbsent((node.object as LeafNode).name,
             () => (node.object as LeafNode).object);
         //title button
-        vWidgetAction.putIfAbsent(
-            (node.object as LeafNode).name, () => b(node));
+        vViewAction.putIfAbsent((node.object as LeafNode).name, () => b(node));
       } catch (_) {}
     }
 
     ///持久化 memoryPageViewDataObject
-    if (_vWidgetData.containsKey((node.object as LeafNode).name)) {
+    if (_vViewData.containsKey((node.object as LeafNode).name)) {
       // print('已经包容' + (node.object as LeafNode).name);
     } else {
       // print('放入' + (node.object as LeafNode).name);
-      _vWidgetData.putIfAbsent(
+      _vViewData.putIfAbsent(
           (node.object as LeafNode).name, () => node.object.clas);
     }
 
-    for (var key in vWidget.keys) {
+    for (var key in vView.keys) {
       print('corePageView:::::' + key);
     }
   }
