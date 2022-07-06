@@ -48,7 +48,7 @@ class _Example3State extends State<Login> {
     Future.delayed(Duration(seconds: 1), () {
       if (!f) {
         setState(() {
-          rocketBottom = MediaQuery.of(context).size.height - 10;
+          rocketBottom = MediaQuery.of(context).size.height + 110;
           rocketWidth = 40.0;
           f = true;
         });
@@ -91,7 +91,7 @@ class _Example3State extends State<Login> {
                                 child: TextField(
                                   autofocus: true,
                                   controller: controller1,
-                                  cursorColor: Colors.orange,
+                                  cursorColor: Colors.white,
                                   cursorWidth: 2,
                                   decoration: InputDecoration(
                                     border: const OutlineInputBorder(
@@ -121,7 +121,6 @@ class _Example3State extends State<Login> {
                             children: <Widget>[
                               Expanded(
                                 child: TextField(
-                                  // focusNode: userFocusNode2,
                                   controller: controller2,
                                   // decoration:null 无边框
                                   decoration: InputDecoration(
@@ -139,7 +138,7 @@ class _Example3State extends State<Login> {
                                     ),
                                   ),
                                   maxLength: 8,
-                                  cursorColor: Colors.orange,
+                                  cursorColor: Colors.white,
                                   cursorWidth: 2,
                                   obscureText: true,
                                   onEditingComplete: onEdit,
@@ -211,26 +210,26 @@ class _Example3State extends State<Login> {
                         ],
                       ),
                     ),
-                    Positioned(
-                        top: 70,
-                        child: Container(
-                          width: 300,
-                          height: 200,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const <Widget>[
-                              CircleAvatar(
-                                  radius: 40.0,
-                                  backgroundColor: Colors.transparent,
-                                  child: Image(
-                                    image: AssetImage(
-                                        'assets/images/feature-1.png'),
-                                    fit: BoxFit.fill,
-                                  ) // Icon(Icons.person),
-                                  ),
-                            ],
-                          ),
-                        )),
+                    // Positioned(
+                    //     top: -60,
+                    //     child: Container(
+                    //       width: 300,
+                    //       height: 200,
+                    //       child: Row(
+                    //         mainAxisAlignment: MainAxisAlignment.center,
+                    //         children: const <Widget>[
+                    //           CircleAvatar(
+                    //               radius: 40.0,
+                    //               backgroundColor: Colors.transparent,
+                    //               child: Image(
+                    //                 image: AssetImage(
+                    //                     'assets/images/feature-1.png'),
+                    //                 fit: BoxFit.fill,
+                    //               ) // Icon(Icons.person),
+                    //               ),
+                    //         ],
+                    //       ),
+                    //     )),
                   ],
                 )),
           ),

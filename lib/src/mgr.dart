@@ -123,7 +123,7 @@ class Mgr extends State {
     } else {
       // print('放入' + (node.object as LeafNode).name);
       _vViewData.putIfAbsent(
-          (node.object as LeafNode).name, () => node.object.clas);
+          (node.object as LeafNode).name, () => node.object.viewData);
     }
 
     for (var key in vView.keys) {

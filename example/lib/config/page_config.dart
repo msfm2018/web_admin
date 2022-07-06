@@ -1,7 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:myplus/myplus.dart';
 
+import '../component/keep_alive_wrapper.dart';
 import '../pages/friend_circle.dart';
 import '../pages/im/mainpage.dart';
+import '../pages/p_aa1.dart';
+import '../pages/p_keep_live.dart';
 import '../pages/p_map.dart';
 import '../pages/p_multipage.dart';
 import '../pages/p_password.dart';
@@ -12,6 +16,7 @@ import '../pages/p_1.dart';
 import '../pages/p_2.dart';
 import '../pages/p_3.dart';
 import '../pages/p_4.dart';
+import '../pages/p_user.dart';
 import '../pages/pdf/my_pdf.dart';
 import '../pages/pdf_view.dart';
 import '../pages/p_signature_pad.dart';
@@ -30,17 +35,17 @@ class P4Data implements DataBase {
   }
 }
 
-class P3Data implements DataBase {
-  var myTitle = 'mytitile';
-  int i = 0;
+// class P3Data implements DataBase {
+//   var myTitle = 'mytitile';
+//   int i = 0;
 
-  /// 数据还原
-  @override
-  void destroy() {
-    myTitle = 'mytitile';
-    i = 0;
-  }
-}
+//   /// 数据还原
+//   @override
+//   void destroy() {
+//     myTitle = 'mytitile';
+//     i = 0;
+//   }
+// }
 
 class P1Data {
   @override
@@ -59,9 +64,24 @@ var twoNode = [
     ///定义子节点
     [
       LeafNode(
+        const SAreaAgeGenderMain(),
+        name: "tabView",
+      ),
+
+      LeafNode(
         P1('人脸检测'),
         name: "人脸检测",
-        clas: P1Data(),
+        viewData: P1Data(),
+      ),
+
+      LeafNode(
+          PXX(
+            key: PageStorageKey<String>("key_Page1"),
+          ),
+          name: "PXX"),
+      LeafNode(
+        const Mydata(),
+        name: "用户数据",
       ),
 
       ///
@@ -74,35 +94,35 @@ var twoNode = [
       LeafNode(
         PPassword(),
         name: "密码强度提示",
-        clas: P1Data(),
+        viewData: P1Data(),
       ),
 
       ///
       LeafNode(
         const PBarcode(),
         name: "生成二维码",
-        clas: P1Data(),
+        viewData: P1Data(),
       ),
 
       ///
       LeafNode(
         const FriendCircle(data: friendCircleData),
         name: "朋友圈",
-        clas: P1Data(),
+        viewData: P1Data(),
       ),
 
       ///
       LeafNode(
         const PMaps(),
         name: "地图",
-        clas: P1Data(),
+        viewData: P1Data(),
       ),
 
       ///
       LeafNode(
         PSignaturePad(),
         name: "手写签名",
-        clas: P1Data(),
+        viewData: P1Data(),
       ),
     ],
 
@@ -154,18 +174,17 @@ var rootNode = [
         name: "用户管理",
       ),
 
-      ///
+      ///系统方法 数据持久化
       LeafNode(
-        P3('角色管理'),
-        name: "角色管理",
-        clas: P3Data(),
+        P3('系统方法', key: const PageStorageKey<String>("p3")),
+        name: "系统方法",
       ),
 
-      ///持久化数据
+      ///框架自带方法 数据持久化
       LeafNode(
-        P4(K4),
-        name: K4,
-        clas: P4Data(),
+        P4('框架方法'),
+        name: '框架方法',
+        viewData: P4Data(),
       ),
     ],
 

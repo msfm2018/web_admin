@@ -18,7 +18,8 @@ class DirectoryNode {
   ///目录折叠图标
   Icon? unSelectedIcon;
 
-  DirectoryNode(this.childDirectoryNodes, this.leafs, this.name, {this.selectedIcon, this.unSelectedIcon});
+  DirectoryNode(this.childDirectoryNodes, this.leafs, this.name,
+      {this.selectedIcon, this.unSelectedIcon});
 }
 
 class LeafNode<T> {
@@ -28,8 +29,8 @@ class LeafNode<T> {
   /// Widget ;
   T object;
 
-  ///Widget 数据
-  T? clas;
+  ///view 数据
+  T? viewData;
 
   ///叶节点选中图标
   Icon? selectedIcon;
@@ -38,5 +39,9 @@ class LeafNode<T> {
   Icon? unSelectedIcon;
 
   ///this.object Widget
-  LeafNode(this.object, {required this.name, this.clas, this.selectedIcon, this.unSelectedIcon});
+  LeafNode(this.object,
+      {required this.name,
+      this.viewData,
+      this.selectedIcon,
+      this.unSelectedIcon});
 }
