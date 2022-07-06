@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'dart:ui';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 
@@ -12,7 +12,9 @@ class Login extends StatefulWidget {
 
 class _Example3State extends State<Login> {
   var isLogin = false;
-
+  var rocketBottom = -80.0;
+  var rocketWidth = 160.0;
+  var f = false;
   FocusScopeNode node = FocusScopeNode();
 
   ///
@@ -43,6 +45,16 @@ class _Example3State extends State<Login> {
   }
 
   Scaffold jmpScaffold(BuildContext context, Color? co) {
+    Future.delayed(Duration(seconds: 1), () {
+      if (!f) {
+        setState(() {
+          rocketBottom = MediaQuery.of(context).size.height - 10;
+          rocketWidth = 40.0;
+          f = true;
+        });
+      }
+    });
+
     return Scaffold(
       backgroundColor: co,
       // appBar: AppBar(),
@@ -51,132 +63,176 @@ class _Example3State extends State<Login> {
           node: node,
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: TextField(
-                          // style: TextStyle(
-                          //   fontSize: 13,
-                          //   fontWeight: FontWeight.bold,
-                          //   color: Color(0xFF999999),
-                          // ),
-                          autofocus: true,
-                          controller: controller1,
-                          cursorColor: Colors.orange,
-                          cursorWidth: 2,
-                          decoration: InputDecoration(
-                            border: const OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                            ),
-                            // icon: Icon(Icons.person),
-                            hintText: '请输入账号',
-                            suffixIcon: IconButton(
-                              ///跳过焦点
-                              focusNode: FocusNode(skipTraversal: true),
-                              icon: const Icon(Icons.close),
-                              onPressed: () {
-                                controller1.clear();
-                              },
-                            ),
-                          ),
-                          onEditingComplete: onEdit,
-                        ),
+                padding: const EdgeInsets.all(8.0),
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    AnimatedPositioned(
+                      child: Image.asset(
+                        'assets/images/rocket.png',
+                        fit: BoxFit.fitWidth,
                       ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: TextField(
-                          // focusNode: userFocusNode2,
-                          controller: controller2,
-                          // decoration:null 无边框
-                          decoration: InputDecoration(
-                            border: const OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                            ),
-                            hintText: '请输入密码',
-                            suffixIcon: IconButton(
-                              focusNode: FocusNode(skipTraversal: true),
-                              icon: const Icon(Icons.close),
-                              onPressed: () {
-                                controller2.clear();
-                              },
-                            ),
-                          ),
-                          maxLength: 8,
-                          cursorColor: Colors.orange,
-                          cursorWidth: 2,
-                          obscureText: true,
-                          onEditingComplete: onEdit,
-                        ),
-                      ),
-                    ],
-                  ), //Future.microtask
+                      bottom: rocketBottom,
+                      width: rocketWidth,
+                      duration: Duration(seconds: 10),
+                      curve: Curves.easeInCubic,
+                    ),
 
-                  Container(
-                    height: 360,
-                    alignment: Alignment.bottomCenter,
-                    child: SizedBox(
-                      width: 420,
-                      child: TextButton(
-                        onPressed: () {
-                          if ((controller1.value.text == "") ||
-                              (controller2.value.text == "")) {
-                            node.nextFocus();
-                          } else {
-                            isLogin = true;
-                            setState(() {});
-                            Future(
-                              () {
-                                Future.delayed(const Duration(seconds: 1), () {
-                                  isLogin = false;
-                                  Navigator.pushAndRemoveUntil<void>(
-                                    context,
-                                    MaterialPageRoute<void>(
-                                        builder: (BuildContext context) =>
-                                            const Home()),
-                                    ModalRoute.withName('/'),
-                                  );
-                                  setState(() {});
-                                });
-                              },
-                            );
-                          }
-                        },
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.resolveWith((states) {
-                            if (states.contains(MaterialState.hovered)) {
-                              return const Color.fromARGB(255, 41, 103, 255);
-                            }
-                            return const Color.fromARGB(155, 41, 103, 255);
-                          }),
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6.0)),
+                    ///约束
+                    Container(
+                      width: 800,
+                      height: MediaQuery.of(context).size.height,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: TextField(
+                                  autofocus: true,
+                                  controller: controller1,
+                                  cursorColor: Colors.orange,
+                                  cursorWidth: 2,
+                                  decoration: InputDecoration(
+                                    border: const OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    // icon: Icon(Icons.person),
+                                    hintText: '请输入账号',
+                                    suffixIcon: IconButton(
+                                      ///跳过焦点
+                                      focusNode: FocusNode(skipTraversal: true),
+                                      icon: const Icon(Icons.close),
+                                      onPressed: () {
+                                        controller1.clear();
+                                      },
+                                    ),
+                                  ),
+                                  onEditingComplete: onEdit,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        child: const Text('登录',
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 255, 255, 255),
-                                fontSize: 20)),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: TextField(
+                                  // focusNode: userFocusNode2,
+                                  controller: controller2,
+                                  // decoration:null 无边框
+                                  decoration: InputDecoration(
+                                    border: const OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    hintText: '请输入密码',
+                                    suffixIcon: IconButton(
+                                      focusNode: FocusNode(skipTraversal: true),
+                                      icon: const Icon(Icons.close),
+                                      onPressed: () {
+                                        controller2.clear();
+                                      },
+                                    ),
+                                  ),
+                                  maxLength: 8,
+                                  cursorColor: Colors.orange,
+                                  cursorWidth: 2,
+                                  obscureText: true,
+                                  onEditingComplete: onEdit,
+                                ),
+                              ),
+                            ],
+                          ), //Future.microtask
+
+                          Container(
+                            height: 360,
+                            alignment: Alignment.bottomCenter,
+                            child: SizedBox(
+                              width: 420,
+                              child: TextButton(
+                                onPressed: () {
+                                  if ((controller1.value.text == "") ||
+                                      (controller2.value.text == "")) {
+                                    node.nextFocus();
+                                  } else {
+                                    isLogin = true;
+                                    setState(() {});
+                                    Future(
+                                      () {
+                                        Future.delayed(
+                                            const Duration(seconds: 1), () {
+                                          isLogin = false;
+                                          Navigator.pushAndRemoveUntil<void>(
+                                            context,
+                                            MaterialPageRoute<void>(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        const Home()),
+                                            ModalRoute.withName('/'),
+                                          );
+                                          setState(() {});
+                                        });
+                                      },
+                                    );
+                                  }
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith(
+                                          (states) {
+                                    if (states
+                                        .contains(MaterialState.hovered)) {
+                                      return const Color.fromARGB(
+                                          255, 41, 103, 255);
+                                    }
+                                    return const Color.fromARGB(
+                                        155, 41, 103, 255);
+                                  }),
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(6.0)),
+                                  ),
+                                ),
+                                child: const Text('登录',
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
+                                        fontSize: 20)),
+                              ),
+                            ),
+                          ),
+
+                          if (isLogin) const CircularProgressIndicator()
+                        ],
                       ),
                     ),
-                  ),
-
-                  if (isLogin) const CircularProgressIndicator()
-                ],
-              ),
-            ),
+                    Positioned(
+                        top: 70,
+                        child: Container(
+                          width: 300,
+                          height: 200,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const <Widget>[
+                              CircleAvatar(
+                                  radius: 40.0,
+                                  backgroundColor: Colors.transparent,
+                                  child: Image(
+                                    image: AssetImage(
+                                        'assets/images/feature-1.png'),
+                                    fit: BoxFit.fill,
+                                  ) // Icon(Icons.person),
+                                  ),
+                            ],
+                          ),
+                        )),
+                  ],
+                )),
           ),
         ),
       ),
