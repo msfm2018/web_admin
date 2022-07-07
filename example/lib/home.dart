@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:mtest/package/toast/lib/toast.dart';
+import 'package:mtest/plug/toast/lib/toast.dart';
 import 'package:myplus/myplus.dart';
 
-import 'config/page_config.dart';
-import 'pages/BaseView/searchbar_delegate.dart';
+import 'view/BaseView/searchbar_delegate.dart';
+import 'view_config/page_config.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);

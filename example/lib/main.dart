@@ -1,12 +1,10 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:mtest/home.dart';
+
+import 'package:flutter/foundation.dart' show kIsWeb, kReleaseMode;
 import 'package:myplus/myplus.dart';
 
 import 'constans/constans.dart';
-import 'pages/BaseView/login.dart';
+import 'view/BaseView/login.dart';
 
 Future<void> main() async {
   /// 确保初始化
@@ -14,17 +12,22 @@ Future<void> main() async {
 
   /// 自定义报错提示
   ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails) {
+    FlutterError.dumpErrorToConsole(flutterErrorDetails);
+    if (kReleaseMode) {
+      //上传错误
+    }
     return const Material(
       child: Center(
-        child: Text("出现错误了~"),
+        child: Text('出现错误'),
       ),
     );
   };
 
-  await SystemChrome.setPreferredOrientations(<DeviceOrientation>[
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown
-  ]).then((_) => runApp(const MyApp()));
+  // await SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown
+  // ])
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -35,16 +38,6 @@ class MyApp extends StatelessWidget {
     ///树展开
     Mgr().isAllExpanded = true;
 
-    ///
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-      statusBarBrightness:
-          !kIsWeb && Platform.isAndroid ? Brightness.dark : Brightness.light,
-      systemNavigationBarColor: Colors.white,
-      systemNavigationBarDividerColor: Colors.transparent,
-      systemNavigationBarIconBrightness: Brightness.dark,
-    ));
     return MaterialApp(
       title: title,
       theme: ThemeData(
@@ -59,7 +52,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         '/': (context) => Login(),
-        'home': (context) => const Home(),
       },
     );
   }
