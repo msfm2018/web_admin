@@ -1,0 +1,44 @@
+状态变化新增 
+
+final GlobalKey<FormState> formKey = GlobalKey<FormState>();   //数据不发生变化关键
+  PickedFile? pickedFile;
+  final ImagePicker imagePicker = ImagePicker();
+  ImageModel imageModel = ImageModel();
+  Uint8List? imageBytes;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var form = Form(
+      key: formKey,
+      child: Wrap(
+        children: <Widget>[
+
+
+
+  _reset() {
+    this.formData = PersonModel();
+    formKey.currentState!.reset();
+    myDS.requestBodyApi.params = formData.toMap();
+    myDS.loadData();
+  }
+
+  _query() {
+    formKey.currentState?.save();
+    myDS.requestBodyApi.params = formData.toMap();
+    myDS.loadData();
+  }
+----------------------------------------------------
+static fullscreenDialog(Widget widget) {
+    return Navigator.push<void>(
+      Cry.context,
+      MaterialPageRoute(
+        builder: (_) => widget,
+        fullscreenDialog: true,
+      ),
+    );
+  }
