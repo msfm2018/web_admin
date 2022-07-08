@@ -3,6 +3,7 @@ import 'package:myplus/myplus.dart';
 
 import '../view/friend_circle.dart';
 import '../view/im/mainpage.dart';
+import '../view/p_indexstack.dart';
 import '../view/p_paginated.dart';
 import '../view/p_keep_live.dart';
 import '../view/p_multipage.dart';
@@ -14,9 +15,7 @@ import '../view/p_3.dart';
 import '../view/p_4.dart';
 import '../view/p_signature_pad.dart';
 
-///以上定义持久化数据
-///定义二级目录
-var twoNode = [
+var Three = [
   DirectoryNode(
     ///下级目录
     [],
@@ -24,18 +23,50 @@ var twoNode = [
     ///定义子节点
     [
       LeafNode(
+        TestIndexStack(),
+        name: "测试indexstack",
+      ),
+      LeafNode(
         const SAreaAgeGenderMain(),
         name: "tabView",
       ),
-
       LeafNode(
         const P1(),
         name: "列表滚动位置固定",
         viewData: P1Data(),
       ),
 
-      LeafNode(const Paginated(), name: "分页数据管理"),
+      ///系统方法 数据持久化
+      LeafNode(
+        P3('系统方法', key: const PageStorageKey<String>("p3")),
+        name: "系统方法",
+      ),
 
+      ///框架自带方法 数据持久化
+      LeafNode(
+        P4('框架方法'),
+        name: '框架方法',
+        viewData: P4Data(),
+      ),
+    ],
+
+    ///
+    "各种状态保存相关",
+  ),
+];
+
+///定义二级目录
+var twoNode = [
+  DirectoryNode(
+    ///下级目录
+    [...Three],
+
+    ///定义子节点
+    [
+      LeafNode(const Paginated(), name: "分页数据管理"),
+// IndexedStack， tabview也可以结合它 保持页面状态
+//对于数据： with SingleTickerProviderStateMixin（一般tabview使用 保持页面状态）  PageStorageKey(ListView使用比较好)
+// PageStorage.of 官方页面数据存储   自己可以做memory管理
       ///
       LeafNode(
         const PMultipage(),
@@ -64,7 +95,7 @@ var twoNode = [
     ],
 
     ///
-    "部门管理",
+    "os开发",
   ),
 ];
 
@@ -92,22 +123,9 @@ var rootNode = [
         const P2(),
         name: "头像处理",
       ),
-
-      ///系统方法 数据持久化
-      LeafNode(
-        P3('系统方法', key: const PageStorageKey<String>("p3")),
-        name: "系统方法",
-      ),
-
-      ///框架自带方法 数据持久化
-      LeafNode(
-        P4('框架方法'),
-        name: '框架方法',
-        viewData: P4Data(),
-      ),
     ],
 
     ///定义目录信息
-    "首 页",
+    "核心科研",
   ),
 ];
