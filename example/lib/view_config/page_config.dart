@@ -64,6 +64,9 @@ var twoNode = [
     ///定义子节点
     [
       LeafNode(const Paginated(), name: "分页数据管理"),
+      //  GlobalKey<FormState> formKey = GlobalKey<FormState>();   Form（children： 这样保持状态
+        // final GlobalKey<ScaffoldState> scaffoldStateKey = GlobalKey<ScaffoldState>();
+
 // IndexedStack， tabview也可以结合它 保持页面状态
 //对于数据： with SingleTickerProviderStateMixin（一般tabview使用 保持页面状态）  PageStorageKey(ListView使用比较好)
 // PageStorage.of 官方页面数据存储   自己可以做memory管理
