@@ -23,7 +23,9 @@ var Three = [
     ///定义子节点
     [
       LeafNode(
-        TestIndexStack(),
+        // selectedIcon: const Icon(Icons.info),
+        // unSelectedIcon: const Icon(Icons.info),
+        const TestIndexStack(),
         name: "测试indexstack",
       ),
       LeafNode(
@@ -65,7 +67,7 @@ var twoNode = [
     [
       LeafNode(const Paginated(), name: "分页数据管理"),
       //  GlobalKey<FormState> formKey = GlobalKey<FormState>();   Form（children： 这样保持状态
-        // final GlobalKey<ScaffoldState> scaffoldStateKey = GlobalKey<ScaffoldState>();
+      // final GlobalKey<ScaffoldState> scaffoldStateKey = GlobalKey<ScaffoldState>();
 
 // IndexedStack， tabview也可以结合它 保持页面状态
 //对于数据： with SingleTickerProviderStateMixin（一般tabview使用 保持页面状态）  PageStorageKey(ListView使用比较好)
