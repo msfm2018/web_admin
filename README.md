@@ -1,3 +1,6 @@
+设计缺陷 请移步
+https://github.com/msfm2018/web_admin2
+
 # v3.1
 
 应用跑起来
